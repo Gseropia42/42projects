@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:37:49 by gseropia          #+#    #+#             */
-/*   Updated: 2015/12/17 16:32:05 by gseropia         ###   ########.fr       */
+/*   Updated: 2015/12/21 20:08:47 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ char **bimlestock(char **stock, int fd)
 		if (!finalbuf)
 		{
 			finalbuf = ft_strdup(buf);
-//			ft_putstr(buf);
-	
+//			ft_putstr(buf);	
 		}
 		else
 		{
@@ -54,24 +53,20 @@ char **bimlestock(char **stock, int fd)
 		}
 	}
 	free(buf);
-	stock = ft_specialsplit(finalbuf, '\n');
-	if (!stock)
-		return(NULL);
-//		ft_putendl("trololol");
-	if (finalbuf)
-		free(finalbuf);
-	return (stock);
+	return (finalbuf);
 }	
 
 int get_next_line(int const fd, char **line)
 {
 	static char **stock;
 	static int index;
-
-	if (fd < 0 || !line)
-		return (-1);
+	unsigned int len;
+	
+	len = 0;
 	if (!stock)
 	{
+		if (fd < 0 || !line)
+			return (-1);
 		index = 0;
 		stock = bimlestock(stock, fd);
 		if (!stock)
@@ -80,18 +75,20 @@ int get_next_line(int const fd, char **line)
 	}
 	if (stock[index])
 	{
-		*line = stock[index];
+		while(stock[index] != '\n' && stock[index])
+			len++;
+		*line = ft_strsub(*line, index , len);
 		index++;
-	//	ft_putendl("par la");
 		return (1);
 	}
-	else 
-		*line = *stock;
-		free(stock);
-		stock = NULL;
+	else
+		*line = NULL;
+//		*line = stock[index];
+	free(stock);
+	stock = NULL;
 		return (0);
 }
-
+/*
 int main(int agc, char **argv)
 {
 	char *line;
@@ -111,4 +108,4 @@ int main(int agc, char **argv)
 	}
 	close(fd);
 	return (0);
-}
+}*/
