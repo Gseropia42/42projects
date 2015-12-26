@@ -26,7 +26,7 @@ char *ft_pimp_my_buffer(const char *buffer, char *ret)
 	}
 	return (ret);
 }
-char **bimlestock(char **stock, int fd)
+char *bimlestock(int fd)
 {
 	char *buf;
 	char *finalbuf;
@@ -49,7 +49,7 @@ char **bimlestock(char **stock, int fd)
 		else
 		{
 			finalbuf = ft_pimp_my_buffer(buf, finalbuf);
-	//		ft_putendl(finalbuf);
+//			ft_putendl(finalbuf);
 		}
 	}
 	free(buf);
@@ -58,35 +58,37 @@ char **bimlestock(char **stock, int fd)
 
 int get_next_line(int const fd, char **line)
 {
-	static char **stock;
+	static char *stock;
 	static int index;
 	unsigned int len;
 	
 	len = 0;
-	if (!stock)
+	if (index == 0)
 	{
-		if (fd < 0 || !line)
+		if (!line || !*line || fd < 0)
 			return (-1);
-		index = 0;
-		stock = bimlestock(stock, fd);
-		if (!stock)
-			return (-1);
-	//	ft_putendl("coucou");
+		stock = bimlestock(fd);
 	}
-	if (stock[index])
+	if (stock)
 	{
-		while(stock[index] != '\n' && stock[index])
+		while(stock[index] && stock[index] != '\n')
+		{
+			index++;
 			len++;
-		*line = ft_strsub(*line, index , len);
-		index++;
-		return (1);
+		}
+		*line = ft_strsub(stock, index-len , len);
+		if (!line)
+			return (-1);
+		if (stock[index++])
+			return(1);
+		else
+		{
+			free(stock);
+			stock = NULL;
+		}
 	}
-	else
-		*line = NULL;
-//		*line = stock[index];
-	free(stock);
-	stock = NULL;
-		return (0);
+	index = 0;
+	return (0);
 }
 /*
 int main(int agc, char **argv)
