@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/06 16:27:49 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/06 19:10:03 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/06 19:26:16 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int get_next_line(int const fd, char **line)
 	char *buf;
 	int ret;
 	static char *stock = NULL;
-	buf = NULL;
+
+	buf = ft_strnew(BUFF_SIZE);
 	if (!line || fd < 0)
 		return (-1);
 	if (stock && (ft_strlen(stock) > 0))
@@ -80,5 +81,7 @@ int get_next_line(int const fd, char **line)
 		stock = ft_strsub(stock, (ft_is_bsn(stock) + 1), (ft_strlen(stock) - ft_is_bsn(stock) - 1));
 		return (1);
 	}
+	free(stock);
+	stock = NULL;
 	return (0);
-}	
+}

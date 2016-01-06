@@ -18,7 +18,6 @@ int main(int agc, char **argv)
 																			while ((i = get_next_line((int const)fd, &line)) > 0)
 																						{
 																											ft_putendl(line);
-																															ft_putnbr(i);
 																																			free(line);
 																																					}
 																					ft_putnbr(i);
