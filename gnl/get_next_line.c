@@ -1,113 +1,84 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/10 15:37:49 by gseropia          #+#    #+#             */
-/*   Updated: 2015/12/21 20:08:47 by gseropia         ###   ########.fr       */
+/*   Created: 2016/01/06 16:27:49 by gseropia          #+#    #+#             */
+/*   Updated: 2016/01/06 19:10:03 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+int ft_is_bsn(char *buf)
+{
+	int i;
 
-char *ft_pimp_my_buffer(const char *buffer, char *ret)
+	i = 0;
+	while (buf[i])
+	{
+		if (buf[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+char * ft_pimp_my_stock(char *buf, char *stock)
 {
 	char *temp;
 
-	temp = ft_strdup(ret);
-	if (temp)
-	{
-		free(ret);
-		ret = ft_strjoin(temp, buffer);
-		free(temp);
-	}
-	return (ret);
+	temp = NULL;
+	if (!stock)
+		return (ft_strdup(buf));
+	temp = ft_strdup(stock);
+	free(stock);
+	stock = ft_strjoin(temp, buf);
+	free(temp);
+	return (stock);
 }
-char *bimlestock(int fd)
+/*char *newstock(char *stock, char *line)
 {
-	char *buf;
-	char *finalbuf;
-	int ret;
-	
-	ret = 0;
-	finalbuf = NULL;
-	buf = ft_strnew(BUFF_SIZE);
-	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
-	{
-//		ft_putnbr(ret);
-		buf[ret] = '\0';
-		if (!buf)
-			return (NULL);
-		if (!finalbuf)
-		{
-			finalbuf = ft_strdup(buf);
-//			ft_putstr(buf);	
-		}
-		else
-		{
-			finalbuf = ft_pimp_my_buffer(buf, finalbuf);
-//			ft_putendl(finalbuf);
-		}
-	}
-	free(buf);
-	return (finalbuf);
-}	
+	char *temp;
 
+	temp = ft_strdup(stock);
+	free(stock);
+	stock = ft_strsub(temp, (ft_is_bsn(temp) + 1), (ft_strlen(temp) - ft_is_bsn(temp) - 1));
+*/
 int get_next_line(int const fd, char **line)
 {
-	static char *stock;
-	static int index;
-	unsigned int len;
-	
-	len = 0;
-	if (index == 0)
-	{
-		if (!line || !*line || fd < 0)
-			return (-1);
-		stock = bimlestock(fd);
-	}
-	if (stock)
-	{
-		while(stock[index] && stock[index] != '\n')
+	char *buf;
+	int ret;
+	static char *stock = NULL;
+	buf = NULL;
+	if (!line || fd < 0)
+		return (-1);
+	if (stock && (ft_strlen(stock) > 0))
+		if (ft_is_bsn(stock) >= 0)
 		{
-			index++;
-			len++;
+			*line = ft_strsub(stock, 0 , ft_is_bsn(stock));
+			stock = ft_strsub(stock, (ft_is_bsn(stock) + 1), (ft_strlen(stock) - ft_is_bsn(stock) - 1));
+			return (1);
 		}
-		*line = ft_strsub(stock, index-len , len);
-		if (!line)
-			return (-1);
-		if (stock[index++])
-			return(1);
-		else
+	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
+	{
+		buf[ret] = '\0';
+		stock = ft_pimp_my_stock(buf, stock);
+		if (ft_is_bsn(stock) >= 0)
 		{
-			free(stock);
-			stock = NULL;
+			*line = ft_strsub(stock, 0 , ft_is_bsn(stock));
+			stock = ft_strsub(stock, (ft_is_bsn(stock) + 1), (ft_strlen(stock) - ft_is_bsn(stock) - 1));
+			return (1);
 		}
 	}
-	index = 0;
-	return (0);
-}
-/*
-int main(int agc, char **argv)
-{
-	char *line;
-	line = NULL;
-	if (agc != 2)
-		ft_putstr("lol tocard");
-	int fd;
-	int i;
-	i= 0;
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-		ft_putstr("lol tocard");
-	while ((i = get_next_line((int const)fd, &line)) > 0)
+	if (ret == -1)
+		return (-1);
+	if (ret == 0 && ft_strlen(stock))
 	{
-		ft_putendl(line);
-		free(line);
+		*line = ft_strsub(stock, 0 , ft_is_bsn(stock));
+		stock = ft_strsub(stock, (ft_is_bsn(stock) + 1), (ft_strlen(stock) - ft_is_bsn(stock) - 1));
+		return (1);
 	}
-	close(fd);
 	return (0);
-}*/
+}	
