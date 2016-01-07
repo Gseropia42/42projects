@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 14:56:00 by gseropia          #+#    #+#             */
-/*   Updated: 2015/12/17 15:20:46 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/07 17:08:11 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
+int				ft_return_pos(char *buf, char c);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstnew(void const *content, size_t content_size);
 void			ft_lstadd(t_list **alst, t_list *new);

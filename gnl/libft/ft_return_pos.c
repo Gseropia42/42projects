@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_return_pos.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/25 22:41:57 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/07 15:44:46 by gseropia         ###   ########.fr       */
+/*   Created: 2016/01/07 15:48:21 by gseropia          #+#    #+#             */
+/*   Updated: 2016/01/07 16:14:28 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+int ft_return_pos(char *buf, char c)
 {
-	while (*s != '\0')
+	int i;
+
+	i = 0;
+	while (buf[i])
 	{
-		if (*s == (char)c)
-			return ((char*)s);
-		s++;
+		if (buf[i] == c)
+			return (i);
+		i++;
 	}
-	if (*s == (char)c)
-		return ((char*)s);
-	return (NULL);
+	return (-1);
 }
