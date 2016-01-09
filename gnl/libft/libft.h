@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 14:56:00 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/08 15:28:53 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/09 17:38:03 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char			*ft_strtrim(char const *s);
 char			**ft_specialsplit(char const *s, char c);
 char			**ft_strsplit(char const *s, char c);
 char			*ft_itoa(int n);
+char			*ft_itoabase(int n, int base);
 char			*ft_strrev(char *s1);
 void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);
