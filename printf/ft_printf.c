@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 12:20:32 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/10 17:38:23 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/11 14:10:32 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ int return_string(va_list ap)
 	return (i);
 }
 
-int return_base(va_list ap, int base, int check)
+int return_base(va_list ap, int base, int check, int maj)
 {
 	char *nbr;
-
-	nbr = ft_itoabase(va_arg(ap, int), base);
+	if (maj == 0)
+		nbr = ft_itoabase(va_arg(ap, int), base);
+	if (maj == 1)
+		nbr = ft_itoabase_max(va_arg(ap, int), base);
 	if (nbr[0] == '0' && check == 1)
 	{
 		nbr++;
@@ -39,14 +41,24 @@ int return_base(va_list ap, int base, int check)
 
 int check_my_format(const char* apply, va_list ap)
 {
-	if(*apply == '#')
+	if (*apply == '#')
 		return(check_diese(apply, ap));
-	else if(*apply == 's')
+	if (*apply == ' ')
+		return(check_space(apply, ap));
+/*	if (*apply == '-')
+		return(check_minus(apply, ap));
+	if (*apply == '+')
+		return(check_plus(apply, ap));
+*/	else if(*apply == 's')
 		return(return_string(ap));
 	else if (*apply == 'd' || *apply == 'i')
-		return(return_base(ap, 10, 0));
+		return(return_base(ap, 10, 0, 0));
 	else if (*apply == 'o')
-		return(return_base(ap, 8, 0));
+		return(return_base(ap, 8, 0, 0));
+	else if (*apply == 'x')
+		return(return_base(ap, 16, 0, 0));
+	else if (*apply == 'X')
+		return(return_base(ap, 16, 0, 1));
 	else if (*apply == '%')
 	{
 		write(1, "%", 1);

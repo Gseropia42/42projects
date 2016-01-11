@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 11:49:23 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/10 17:38:15 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/11 14:14:54 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int main()
 	int d = 0;
 	{
 
-		d = printf("Le mot est : %#x,%#o,%s,%%, lol\n", 00544, 345, "Paulo");
+		d = printf("Le mot est : %#o,% d,% s,%%, lol\n", 666, 345, "Paul");
 		ft_putnbr(d);
 		ft_putchar('\n');
-		e = ft_printf("Le mot est : %#x,%#o,%s,%%, lol\n", 00544, 345, "Paulo");
+		e = ft_printf("Le mot est : %#o,% d,% s,%%, lol\n", 666, 345, "Paul");
 		ft_putnbr(e);
 	}
 		return (0);
