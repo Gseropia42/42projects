@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 12:20:32 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/12 13:08:16 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/12 17:42:27 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,11 @@ int return_base(va_list ap, int base, int check, int maj)
 
 int check_my_format(const char* apply, va_list ap)
 {
-	if (*apply == '#')
-		return(check_diese(++apply, ap));
-	if (*apply == ' ')
-		return(check_space(++apply, ap));
-/*	if (*apply == '-')
-		return(check_minus(apply, ap));
-	if (*apply == '+')
-		return(check_plus(apply, ap));
-*/	else if(*apply == 's')
+	if (ft_is_a_flag(apply))
+		return(return_flag(apply, ap));
+	if (*apply == 'c')
+		return(return_char(ap));
+	else if(*apply == 's')
 		return(return_string(ap));
 	else if (*apply == 'd' || *apply == 'i')
 		return(return_base(ap, 10, 0, 0));
@@ -83,9 +79,8 @@ int ft_printf(const char *format, ...)
 		}
 		else
 		{
-			i =	i + check_my_format(++format,ap);
-			format = move_to_next_ap(format);
-		//	ft_putnbr(i);
+			i =	i + check_my_format(++format,ap);	
+			format = move_to_next_ap(format, 1);
 		}
 	}
 	va_end(ap);

@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 17:09:35 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/12 13:16:06 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/12 17:57:56 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ int test_du_zero(va_list ap)
 int check_diese(const char *format, va_list ap)
 {
 	if (!test_du_zero(ap) == 1)
-		return(check_my_format(++format, ap));
+		return(check_my_format(format, ap));
+	while (ft_is_a_flag(format))
+		format++;
 	if (*format == 'o')
 	{
 		write(1, "0", 1);
@@ -48,26 +50,28 @@ int check_diese(const char *format, va_list ap)
 	}
 	return(check_my_format(format, ap));
 }
-const char  *move_to_next_ap(const char *format)
+const char  *move_to_next_ap(const char *format, int check)
 {
 	char *s;
 	int index;
 
 	index = 0;
-	s = ft_strnew(14);
-	s = "%sSpdDioOuUxXcC";
-
+	s = ft_strnew(15);
+	s = "sSpdDioOuUxXcC\%";
 	while(*format)
 	{
-		while(index < 14)
+		while(index < 15)
 		{
-	//		ft_putendl("ok");
 			if (*format == s[index++])
-				return(++format);
+			{
+				if (check == 1)
+				{
+					return(++format);
+				}
+				return(format);
+			}
 		}
-	//	ft_putendl("why");
 		format++;
-	//	ft_putendl("lol");
 		index = 0;
 	}
 	return(format);
