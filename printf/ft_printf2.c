@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 17:09:35 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/11 13:44:00 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/12 13:16:06 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ int check_diese(const char *format, va_list ap)
 {
 	if (!test_du_zero(ap) == 1)
 		return(check_my_format(++format, ap));
-	format++;
-	while (*format == ' ')
-		format++;
 	if (*format == 'o')
 	{
 		write(1, "0", 1);

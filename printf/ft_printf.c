@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 12:20:32 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/11 14:10:32 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/12 13:08:16 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ int return_base(va_list ap, int base, int check, int maj)
 int check_my_format(const char* apply, va_list ap)
 {
 	if (*apply == '#')
-		return(check_diese(apply, ap));
+		return(check_diese(++apply, ap));
 	if (*apply == ' ')
-		return(check_space(apply, ap));
+		return(check_space(++apply, ap));
 /*	if (*apply == '-')
 		return(check_minus(apply, ap));
 	if (*apply == '+')
