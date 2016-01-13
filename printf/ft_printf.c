@@ -6,68 +6,77 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 12:20:32 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/12 17:42:27 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/13 16:56:23 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int return_string(va_list ap)
+int return_flags(const char *format, va_list ap)
 {
-	char *s;
-	int i;
-
-	ft_putstr(s = va_arg(ap, char*));
-	i = ft_strlen(s);
-	return (i);
+	if (*format == '#')
+		return(check_diese(++format, ap));
+	if (*format == ' ')
+		return(check_space(++format, ap));
+	if (*format == '-')
+		return(0);
+	if (*format == '+')
+		return(0);
+	if (*format == '.')
+		return(0);
+	if (ft_isdigit(*format) && *format != '0')
+		return(0);
+	if (*format == '0')
+		return(0);
+	return(0);	
 }
-
-int return_base(va_list ap, int base, int check, int maj)
+int check_other_formats(const char *format, va_list ap)
 {
-	char *nbr;
-	if (maj == 0)
-		nbr = ft_itoabase(va_arg(ap, int), base);
-	if (maj == 1)
-		nbr = ft_itoabase_max(va_arg(ap, int), base);
-	if (nbr[0] == '0' && check == 1)
-	{
-		nbr++;
-		ft_putstr(nbr);
-		return(ft_strlen(nbr) - 1);
-	}
-	ft_putstr(nbr);
-	return(ft_strlen(nbr));
+	if (*format == 'S')
+		return (0);
+	if (*format == 'U')
+		return(return_unsigned_long(ap));
+	if (*format == 'u')
+		return(return_unsigned(ap));
+	if (*format == 'D')
+		return(return_long(ap));
+	if (*format == 'C')
+		return(0);
+	return(0);
 }
-
-int check_my_format(const char* apply, va_list ap)
+int check_my_format(const char* format, va_list ap)
 {
-	if (ft_is_a_flag(apply))
-		return(return_flag(apply, ap));
-	if (*apply == 'c')
+	if (ft_is_a_flag(format) || ft_isdigit(*format))
+		return(return_flags(format, ap));
+	if (*format == 'p')
+		return(0);
+	if (*format == 'c')
 		return(return_char(ap));
-	else if(*apply == 's')
+	else if(*format == 's')
 		return(return_string(ap));
-	else if (*apply == 'd' || *apply == 'i')
-		return(return_base(ap, 10, 0, 0));
-	else if (*apply == 'o')
-		return(return_base(ap, 8, 0, 0));
-	else if (*apply == 'x')
-		return(return_base(ap, 16, 0, 0));
-	else if (*apply == 'X')
-		return(return_base(ap, 16, 0, 1));
-	else if (*apply == '%')
+	else if (*format == 'd' || *format == 'i')
+		return(return_int(ap));
+	else if (*format == 'o')
+		return(return_base(ap, 8));
+	else if (*format == 'x')
+		return(return_base(ap, 16));
+	else if (*format == 'X')
+		return(return_base_max(ap, 16));
+	else if (*format == '%')
 	{
 		write(1, "%", 1);
 		return (1);
 	}
-	return(0);
+	return(check_other_formats(format, ap));
 }
 
 int ft_printf(const char *format, ...)
 {
 	va_list ap;
 	int i;
-    
+    char *temp;
+
+	temp = NULL;
 	i = 0;
 	va_start(ap, format);
 	while (*format)
@@ -79,8 +88,10 @@ int ft_printf(const char *format, ...)
 		}
 		else
 		{
-			i =	i + check_my_format(++format,ap);	
-			format = move_to_next_ap(format, 1);
+			i =	i + check_my_format(++format,ap);
+			while (!ft_is_convert(format))
+				format++;
+			format++;
 		}
 	}
 	va_end(ap);

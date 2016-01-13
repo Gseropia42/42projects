@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 17:22:38 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/11 12:16:47 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/13 10:53:44 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static	char	*remplimoitoucaaussi(char *s1, int n, size_t size, int base)
 	lol = n;
 	while (size > index && size)
 	{
-		if((s1[size - 1] = lol % base + '0') > 57)
+		if ((s1[size - 1] = lol % base + '0') > 57)
 			s1[size - 1] = lol % base + '0' + 39;
 		lol = lol / base;
 		size--;

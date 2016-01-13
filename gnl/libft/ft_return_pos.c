@@ -6,13 +6,13 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/07 15:48:21 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/07 16:14:28 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/13 10:54:00 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_return_pos(char *buf, char c)
+int	ft_return_pos(char *buf, char c)
 {
 	int i;
 
