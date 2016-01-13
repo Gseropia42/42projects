@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/13 13:16:36 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/13 16:34:38 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/13 21:59:46 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,42 @@ int return_string(va_list ap)
 	return (i);
 }
 
-int return_base(va_list ap, int base)
+int return_base(va_list ap, int base, size_t size)
 {
 	char *nbr;
-//	if (maj == 0)
-//		nbr = ft_itoabase(va_arg(ap, int), base);
-//	if (maj == 1)
-//		nbr = ft_itoabase_max(va_arg(ap, int), base);
+	int taille;
+	int ret;
+
+	ret = 0;
 	nbr = ft_itoabase(va_arg(ap,int), base);
+	taille = ft_strlen(nbr);
+	while (size-- > taille)
+	{
+		write(1, "0", 1);
+		ret++;
+	}
 	ft_putstr(nbr);
-	return(ft_strlen(nbr));
+	return(ft_strlen(nbr) + ret);
 }
 
-int return_base_max(va_list ap, int base)
+int return_base_max(va_list ap, int base, size_t size)
 {
 	char *nbr;
+	int taille;
+	int ret;
 
-	nbr = ft_itoabase_max(va_arg(ap, int), base);
+	ret = 0;
+	nbr = ft_itoabase_max(va_arg(ap,int), base);
+	taille = ft_strlen(nbr);
+	while (size-- > taille)
+	{
+		write(1, "0", 1);
+		ret++;
+	}
 	ft_putstr(nbr);
-	return(ft_strlen(nbr));
+	return(ft_strlen(nbr) + ret);
 }
+
 int return_char(va_list ap)
 {
 	int i;
@@ -52,36 +68,76 @@ int return_char(va_list ap)
 	return(1);
 }
 
-int return_int(va_list ap)
+int return_int(va_list ap, size_t size)
 {
 	char *nbr;
+	int taille;
+	int ret;
 
-	nbr = ft_itoa(va_arg(ap, int));
+	ret = 0;
+	nbr = ft_itoa(va_arg(ap,int));
+	taille = ft_strlen(nbr);
+	while (size-- > taille)
+	{
+		write(1, "0", 1);
+		ret++;
+	}
+	ft_putstr(nbr);
+	return(ft_strlen(nbr) + ret);
+}
+
+int return_unsigned(va_list ap, size_t size)
+{
+	char *nbr;
+	int taille;
+	int ret;
+
+	ret = 0;
+	nbr = ft_itoa(va_arg(ap,unsigned int));
+	taille = ft_strlen(nbr);
+	while (size-- > taille)
+	{
+		write(1, "0", 1);
+		ret++;
+	}
 	ft_putstr(nbr);
 	return(ft_strlen(nbr));
 }
 
-int return_unsigned(va_list ap)
+int return_unsigned_long(va_list ap, size_t size)
 {
 	char *nbr;
+	int taille;
+	int ret;
 
-	nbr = ft_itoa(va_arg(ap, unsigned int));
+	ret = 0;
+	nbr = ft_itoa(va_arg(ap,unsigned long));
+	taille = ft_strlen(nbr);
+	while (size-- > taille)
+	{
+		write(1, "0", 1);
+		ret++;
+	}
 	ft_putstr(nbr);
 	return(ft_strlen(nbr));
 }
 
-int return_unsigned_long(va_list ap)
+int return_long(va_list ap, size_t size)
 {
 	char *nbr;
-	nbr = ft_itoa(va_arg(ap, unsigned long));
-	ft_putstr(nbr);
-	return(ft_strlen(nbr));
-}
+	size_t temp;
+	int taille;
+	int ret;
 
-int return_long(va_list ap)
-{
-	char *nbr;
+	ret = 0;
+	temp = size;
 	nbr = ft_itoa(va_arg(ap, long));
+	taille = ft_strlen(nbr);
+	while (size-- > taille)
+	{
+		write(1, "0", 1);
+		ret++;
+	}
 	ft_putstr(nbr);
 	return(ft_strlen(nbr));
 }

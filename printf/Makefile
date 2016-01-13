@@ -6,19 +6,19 @@
 #    By: tisergue <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/11 11:37:26 by tisergue          #+#    #+#              #
-#    Updated: 2016/01/11 12:29:41 by gseropia         ###   ########.fr        #
+#    Updated: 2016/01/13 22:18:18 by gseropia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME		=		libftprintf.a
 
-SRCS		=		ft_printf.c ft_printf2.c ft_printf3.c main.c
+SRCS		=		*.c libft/*.c
 
 OBJS		=		$(SRCS:.c=.o)
 
 FLAGS		=		-Wall -Werror -Wextra
 
-MAKE 		=		make -C ../gnl/libft/
+MAKE 		=		make -C libft
 
 CC			=		gcc
 
@@ -35,12 +35,12 @@ $(NAME)		:
 
 clean		:
 					@$(RM) $(OBJS)
-					@make clean -C ../gnl/libft/
+					@make clean -C libft/
 					@echo "\033[33;32m=== Clean (ft_printf)\t\tDONE"
 
 fclean		:		clean
 					@$(RM) $(NAME)
-					@make fclean -C ../gnl/libft/
+					@make fclean -C libft/
 					@echo "\033[33;32m=== Fclean (ft_printf)\t\tDONE"
 
 re			:		fclean all

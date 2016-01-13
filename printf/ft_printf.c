@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 12:20:32 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/13 16:56:23 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/13 22:01:10 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int return_flags(const char *format, va_list ap)
 {
-	if (*format == '#')
-		return(check_diese(++format, ap));
-	if (*format == ' ')
-		return(check_space(++format, ap));
-	if (*format == '-')
-		return(0);
 	if (*format == '+')
 		return(0);
+	if (*format == ' ')
+		return(check_space(++format, ap));
+	if (*format == '#')
+		return(check_diese(++format, ap));
 	if (*format == '.')
+		return(0);
+	if (*format == '-')
 		return(0);
 	if (ft_isdigit(*format) && *format != '0')
 		return(0);
@@ -35,11 +35,11 @@ int check_other_formats(const char *format, va_list ap)
 	if (*format == 'S')
 		return (0);
 	if (*format == 'U')
-		return(return_unsigned_long(ap));
+		return(return_unsigned_long(ap, 0));
 	if (*format == 'u')
-		return(return_unsigned(ap));
+		return(return_unsigned(ap, 0));
 	if (*format == 'D')
-		return(return_long(ap));
+		return(return_long(ap, 0));
 	if (*format == 'C')
 		return(0);
 	return(0);
@@ -55,13 +55,13 @@ int check_my_format(const char* format, va_list ap)
 	else if(*format == 's')
 		return(return_string(ap));
 	else if (*format == 'd' || *format == 'i')
-		return(return_int(ap));
+		return(return_int(ap, 0));
 	else if (*format == 'o')
-		return(return_base(ap, 8));
+		return(return_base(ap, 8, 0));
 	else if (*format == 'x')
-		return(return_base(ap, 16));
+		return(return_base(ap, 16, 0));
 	else if (*format == 'X')
-		return(return_base_max(ap, 16));
+		return(return_base_max(ap, 16, 0));
 	else if (*format == '%')
 	{
 		write(1, "%", 1);
