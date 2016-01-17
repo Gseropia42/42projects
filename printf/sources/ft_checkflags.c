@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/11 13:57:08 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/13 21:36:14 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/14 15:14:04 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,14 @@ int check_precision(const char *format, va_list ap)
 		return(check_pre_str(++format, ap, i));
 	else if (*temp == 'i' || *temp == 'd')
 		return(return_int(ap, i));
+	else if (*temp == 'X')
+		return(return_base_max(ap, 16, i));
+	else if (*temp == 'x')
+		return(return_base(ap, 16, i));
+	else if (*temp == 'o')
+		return(return_base(ap, 8, i));
+	else if (*temp == 'u')
+		return(return_unsigned(ap, i));
 	return (0);
 }
 int check_space(const char *format, va_list ap)

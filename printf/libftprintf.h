@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 14:26:03 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/13 22:08:59 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/16 20:21:31 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 
 # include <stdarg.h>
 # include "libft/libft.h"
+
+typedef struct g_list
+{
+	char fonction;
+	int	flagminus;
+	int flagdiese;
+	int flagzero;
+	int flagplus;
+	int precision;
+	int prec_size;
+	int size;
+	int flagspace;
+}	sdp_list;
+
+
 int			test_du_zero(va_list(ap));
 int			return_flags(const char *apply, va_list ap);
 int			check_precision(const char *format, va_list ap);

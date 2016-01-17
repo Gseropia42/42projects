@@ -5,95 +5,94 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/08 12:20:32 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/13 22:01:10 by gseropia         ###   ########.fr       */
+/*   Created: 2016/01/16 13:15:27 by gseropia          #+#    #+#             */
+/*   Updated: 2016/01/17 14:19:21 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int return_flags(const char *format, va_list ap)
+
+char	get_next_type(char *format)
 {
-	if (*format == '+')
-		return(0);
-	if (*format == ' ')
-		return(check_space(++format, ap));
-	if (*format == '#')
-		return(check_diese(++format, ap));
-	if (*format == '.')
-		return(0);
-	if (*format == '-')
-		return(0);
-	if (ft_isdigit(*format) && *format != '0')
-		return(0);
-	if (*format == '0')
-		return(0);
-	return(0);	
-}
-int check_other_formats(const char *format, va_list ap)
-{
-	if (*format == 'S')
-		return (0);
-	if (*format == 'U')
-		return(return_unsigned_long(ap, 0));
-	if (*format == 'u')
-		return(return_unsigned(ap, 0));
-	if (*format == 'D')
-		return(return_long(ap, 0));
-	if (*format == 'C')
-		return(0);
-	return(0);
-}
-int check_my_format(const char* format, va_list ap)
-{
-	if (ft_is_a_flag(format) || ft_isdigit(*format))
-		return(return_flags(format, ap));
-	if (*format == 'p')
-		return(0);
-	if (*format == 'c')
-		return(return_char(ap));
-	else if(*format == 's')
-		return(return_string(ap));
-	else if (*format == 'd' || *format == 'i')
-		return(return_int(ap, 0));
-	else if (*format == 'o')
-		return(return_base(ap, 8, 0));
-	else if (*format == 'x')
-		return(return_base(ap, 16, 0));
-	else if (*format == 'X')
-		return(return_base_max(ap, 16, 0));
-	else if (*format == '%')
+	char *s;
+	s = ft_strnew(15);
+	s = "%sSdDpoOxXcCuUi";
+	while (*s)
 	{
-		write(1, "%", 1);
-		return (1);
+		if (*s++ == *format)
+			return (*format);
 	}
-	return(check_other_formats(format, ap));
+	return ('\0');
 }
 
-int ft_printf(const char *format, ...)
+char gnt(char *format)
 {
-	va_list ap;
-	int i;
-    char *temp;
+	char *s;
+	char *temp;
 
-	temp = NULL;
-	i = 0;
-	va_start(ap, format);
+	s = ft_strnew(15);
+	s = "%sSdDpoOxXcCuUi";
+	temp = s;
+	while (*format)
+	{
+		
+		while (*s)
+		{
+			if (*s++ == *format)
+				return (*format);
+		}
+		s = temp;
+		format++;
+	}
+	return ('\0');
+}
+sdp_list *stocktoutca(sdp_list **list)
+{
+	sdp_list *stock;
+	stock = malloc(sizeof(sdp_list));
+	stock->fonction = 'd';
+	stock->flagminus = 0;
+	stock->flagdiese = 0;
+	stock->flagzero = 0;
+	stock->flagplus = 0;
+	stock->flagspace = 0;
+	stock->precision = 0;
+	stock->prec_size = 0;
+	stock->size = 0;
+	*list = stock;
+	return(stock);
+}
+
+int		ft_printf(const char *format, ...)
+{
+	int			ret;
+	va_list		ap;
+	char		fctn;
+	sdp_list	*stock;
+
+	va_start(ap , format);
+	ret = 0;
 	while (*format)
 	{
 		if (*format != '%')
 		{
 			write(1, format++, 1);
-			i++;
+			ret++;
 		}
 		else
 		{
-			i =	i + check_my_format(++format,ap);
-			while (!ft_is_convert(format))
+			stock = stocktoutca(&stock);
+			stock->fonction = gnt((char*)++format);
+			if (!(stock->fonction))
+				return (-1);
+			ret = ret + check_format((char*)format, ap, stock);
+			while (!get_next_type((char*)format))
 				format++;
 			format++;
+		free(stock);
 		}
 	}
 	va_end(ap);
-	return (i);
+	return (ret);
 }

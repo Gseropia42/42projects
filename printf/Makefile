@@ -6,7 +6,7 @@
 #    By: tisergue <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/11 11:37:26 by tisergue          #+#    #+#              #
-#    Updated: 2016/01/13 22:18:18 by gseropia         ###   ########.fr        #
+#    Updated: 2016/01/14 13:41:49 by gseropia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -28,7 +28,7 @@ all			:		$(NAME)
 
 $(NAME)		:	
 					@$(MAKE)
-					@$(CC) $(CFLAGS) -c $(SRCS)
+					@$(CC) -c $(SRCS)
 					@ar rc $(NAME) $(OBJS)
 					@ranlib $(NAME)
 					@echo "\033[33;32m=== Compilation (ft_printf)\tDONE"

@@ -6,13 +6,13 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/13 13:55:43 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/13 17:29:31 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/14 15:35:10 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int ft_is_convert(const char *format)
+int ft_is_convert(char *format, int index)
 {
 	char *s;
 
@@ -20,7 +20,7 @@ int ft_is_convert(const char *format)
 	s = "%sSpdDioOuUxXcC";
 	while (*s)
 	{
-		if (*format == *s++)
+		if (format[index] == *s++)
 			return (1);
 	}
 	return (0);
