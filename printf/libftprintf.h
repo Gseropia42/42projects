@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 14:26:03 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/16 20:21:31 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/17 18:17:56 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,18 @@ typedef struct g_list
 	int size;
 	int flagspace;
 }	sdp_list;
-
-
+char		get_next_type(char*format);
+int			check_format(char *format, va_list ap, sdp_list *stock);
 int			test_du_zero(va_list(ap));
 int			return_flags(const char *apply, va_list ap);
 int			check_precision(const char *format, va_list ap);
-int			return_char(va_list ap);
+int			return_c(va_list ap, sdp_list *stock);
+int			return_s(va_list ap, sdp_list *stock);
+int			return_i(va_list ap, sdp_list *stock);
 int			ft_is_a_flag(const char *format);
 int			ft_printf(const char *format, ...);
-int			return_base(va_list ap, int base, size_t size);
-int			check_diese(const char *format, va_list ap);
+int			return_base(va_list ap,sdp_list *stock, int base, int maj);
+int			check_diese(sdp_list *stock);
 int			check_my_format(const char* format, va_list ap);
 int			check_space(const char* format, va_list ap);
 char		*ft_itoabase_max(int n, int base);

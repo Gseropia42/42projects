@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 14:40:01 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/17 14:34:45 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/17 18:14:21 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ int return_s(va_list ap, sdp_list *stock)
 {
 	char *s;
 
-	s = va_arg(ap, char*);
+	if(!(s = va_arg(ap, char*)))
+		return (0);
 	if (stock->flagzero && !stock->flagminus && stock->size)
 		return (return_s_zeroflag(s, stock) + return_text(s,stock));
 	if (stock->flagminus && stock->size)

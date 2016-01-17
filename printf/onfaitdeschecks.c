@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:32:56 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/17 14:24:23 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/17 18:18:07 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ int affichage(va_list ap, sdp_list *stock)
 		return(return_i(ap, stock));
 	if (stock->fonction == 'c')
 		return(return_c(ap, stock));
+	if (stock->fonction == 'o')
+		return(return_base(ap, stock, 8, 0));
+	if (stock->fonction == 'x')
+		return(return_base(ap, stock, 16, 0));
+	if (stock->fonction == 'X')
+		return(return_base(ap, stock, 16, 1));
 	return(0);
 }
 int	check_format(char *format, va_list ap, sdp_list *stock)
