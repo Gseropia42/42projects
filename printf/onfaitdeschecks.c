@@ -6,15 +6,16 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:32:56 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/17 18:18:07 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/18 17:24:45 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-char *move_format(char *format)
+char	*move_format(char *format)
 {
-	if (*format == '+' || *format == '-' || *format == ' ' || *format == '#' || *format == '0')
+	if (*format == '+' || *format == '-' || *format == ' '
+			|| *format == '#' || *format == '0')
 		return (++format);
 	if (ft_isdigit(*format))
 	{
@@ -31,23 +32,30 @@ char *move_format(char *format)
 	}
 	return (format);
 }
-int affichage(va_list ap, sdp_list *stock)
+
+int		affichage(va_list ap, sdp_list *stock)
 {
 	if (stock->fonction == 's')
-		return(return_s(ap, stock));
+		return (return_s(ap, stock));
 	if (stock->fonction == 'd' || stock->fonction == 'i')
-		return(return_i(ap, stock));
-	if (stock->fonction == 'c')
-		return(return_c(ap, stock));
+		return (return_i(ap, stock));
+	if (stock->fonction == 'c' || stock->fonction == '%')
+		return (return_c(ap, stock));
 	if (stock->fonction == 'o')
-		return(return_base(ap, stock, 8, 0));
+		return (return_base(ap, stock, 8, 0));
 	if (stock->fonction == 'x')
-		return(return_base(ap, stock, 16, 0));
+		return (return_base(ap, stock, 16, 0));
 	if (stock->fonction == 'X')
-		return(return_base(ap, stock, 16, 1));
-	return(0);
+		return (return_base(ap, stock, 16, 1));
+	if (stock->fonction == 'u')
+		return (return_base(ap, stock, 10, 0));
+	return (0);
 }
-int	check_format(char *format, va_list ap, sdp_list *stock)
+
+void	more_checks(char *format, va_list ap, sdp_list *stock)
+{
+}
+int		check_format(char *format, va_list ap, sdp_list *stock)
 {
 	while (*format != stock->fonction)
 	{
@@ -68,7 +76,11 @@ int	check_format(char *format, va_list ap, sdp_list *stock)
 		}
 		else if (*format == '-')
 			stock->flagminus = 1;
+		else if (*format == 'h' || *format == 'l' || *format == 'z' || *format == 'j')
+			more_checks(format, ap, stock);
+		else
+			return(0);
 		format = move_format(format);
 	}
-	return(affichage(ap,stock));
+	return (affichage(ap, stock));
 }

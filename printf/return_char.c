@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 14:25:08 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/17 14:57:24 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/18 17:15:11 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,13 @@ int return_c(va_list ap , sdp_list *stock)
 
 	ret = 0;
 	print = ' ';
-	i = va_arg(ap, int);
-	c = i;
+	if (stock->fonction == '%')
+		c = '%';
+	else
+	{
+		i = va_arg(ap, int);
+		c = i;
+	}
 	if (stock->flagzero && !stock->flagminus)
 	{
 		print = '0';

@@ -6,16 +6,16 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:15:27 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/17 15:18:12 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/18 14:10:38 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-
-char	get_next_type(char *format)
+char		get_next_type(char *format)
 {
 	char *s;
+
 	s = ft_strnew(15);
 	s = "%sSdDpoOxXcCuUi";
 	while (*s)
@@ -26,7 +26,7 @@ char	get_next_type(char *format)
 	return ('\0');
 }
 
-char gnt(char *format)
+char		gnt(char *format)
 {
 	char *s;
 	char *temp;
@@ -36,7 +36,6 @@ char gnt(char *format)
 	temp = s;
 	while (*format)
 	{
-		
 		while (*s)
 		{
 			if (*s++ == *format)
@@ -47,11 +46,13 @@ char gnt(char *format)
 	}
 	return ('\0');
 }
-sdp_list *stocktoutca(sdp_list **list)
+
+sdp_list	*stocktoutca(sdp_list **list)
 {
 	sdp_list *stock;
+
 	stock = malloc(sizeof(sdp_list));
-	stock->fonction = 'd';
+	stock->fonction = 0;
 	stock->flagminus = 0;
 	stock->flagdiese = 0;
 	stock->flagzero = 0;
@@ -61,17 +62,17 @@ sdp_list *stocktoutca(sdp_list **list)
 	stock->prec_size = 0;
 	stock->size = 0;
 	*list = stock;
-	return(stock);
+	return (stock);
 }
 
-int		ft_printf(const char *format, ...)
+int			ft_printf(const char *format, ...)
 {
 	int			ret;
 	va_list		ap;
 	char		fctn;
 	sdp_list	*stock;
 
-	va_start(ap , format);
+	va_start(ap, format);
 	ret = 0;
 	while (*format)
 	{
@@ -87,10 +88,12 @@ int		ft_printf(const char *format, ...)
 			if (!(stock->fonction))
 				return (-1);
 			ret = ret + check_format((char*)format, ap, stock);
-			while (!get_next_type((char*)format))
+			while (!get_next_type((char*)format) && *format)
 				format++;
+			if (*format == '\0')
+				return(ret);
 			format++;
-		free(stock);
+			free(stock);
 		}
 	}
 	va_end(ap);

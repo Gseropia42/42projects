@@ -7,12 +7,6 @@ static	char	*remplimoitoucaaussi(char *s1, int n, size_t size, int base)
 
 	index = 0;
 	lol = 0;
-	if (n < 0)
-	{
-		s1[0] = '-';
-		index++;
-		n = -n;
-	}
 	lol = n;
 	while (size > index && size)
 	{
@@ -24,17 +18,15 @@ static	char	*remplimoitoucaaussi(char *s1, int n, size_t size, int base)
 	return (s1);
 }
 
-char			*ft_itoabase_max(int n, int base)
+char			*ft_itoabase_max(unsigned int n, int base)
 {
-	int		test;
+	unsigned int	test;
 	size_t	taille;
 	char	*ret;
 
 	ret = NULL;
 	taille = 1;
 	test = n;
-	if (n < 0)
-		taille++;
 	while (test / base != 0)
 	{
 		taille++;
