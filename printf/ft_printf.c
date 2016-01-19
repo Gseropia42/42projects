@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:15:27 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/18 14:10:38 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/19 22:31:10 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char		gnt(char *format)
 	s = ft_strnew(15);
 	s = "%sSdDpoOxXcCuUi";
 	temp = s;
+
 	while (*format)
 	{
 		while (*s)
@@ -46,7 +47,6 @@ char		gnt(char *format)
 	}
 	return ('\0');
 }
-
 sdp_list	*stocktoutca(sdp_list **list)
 {
 	sdp_list *stock;
@@ -61,19 +61,39 @@ sdp_list	*stocktoutca(sdp_list **list)
 	stock->precision = 0;
 	stock->prec_size = 0;
 	stock->size = 0;
+	stock->flaglong = 0;
+	stock->flaglonglong = 0;
+	stock->flagmax = 0;
+	stock->flagshort = 0;
+	stock->flagchar = 0;
+	stock->sizze = 0;
 	*list = stock;
 	return (stock);
 }
+int			checkflagada(const char *format)
+{
+	char *s;
 
+	s = ft_strnew(19);
+	s = "0123456789hljz-+. #";
+	while (*s)
+	{
+		if (*s++ == *format)
+			return (1);
+	}
+	return (0);
+}
 int			ft_printf(const char *format, ...)
 {
 	int			ret;
+	int			temp;
 	va_list		ap;
 	char		fctn;
 	sdp_list	*stock;
 
 	va_start(ap, format);
 	ret = 0;
+	temp = ret;
 	while (*format)
 	{
 		if (*format != '%')
@@ -83,16 +103,26 @@ int			ft_printf(const char *format, ...)
 		}
 		else
 		{
+			temp = ret;
 			stock = stocktoutca(&stock);
-			stock->fonction = gnt((char*)++format);
-			if (!(stock->fonction))
-				return (-1);
-			ret = ret + check_format((char*)format, ap, stock);
-			while (!get_next_type((char*)format) && *format)
-				format++;
-			if (*format == '\0')
-				return(ret);
-			format++;
+			if((stock->fonction = gnt((char*)++format)))
+			{
+				ret = ret + check_format((char*)format, ap, stock);
+				if (ret != temp)
+				{
+					while (!get_next_type((char*)format) && *format)
+						format++;
+					format++;
+				}
+				else
+					while (checkflagada(format) && *format)
+						format++;
+				if (*format == '\0')
+					return(ret);
+			}
+			else
+				while (checkflagada(format) && *format)
+					format++;
 			free(stock);
 		}
 	}

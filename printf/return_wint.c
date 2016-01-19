@@ -6,39 +6,38 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 14:25:08 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 21:53:30 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/19 16:33:41 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int return_c(va_list ap , sdp_list *stock)
+int return_C(va_list ap , sdp_list *stock)
 {
 	char c;
-	int i;
+	wint_t i;
 	char print;
 	int ret;
 
 	ret = 0;
 	print = ' ';
-	if (stock->flaglong == 1)
-		return (return_C(ap, stock));
 	if (stock->fonction == '%')
 		c = '%';
 	else
 	{
-		i = va_arg(ap, int);
+		i = va_arg(ap, wint_t);
 		c = i;
 	}
 	if (stock->flagzero && !stock->flagminus)
-		print = '0';
-	while (stock->size > 1 && !stock->flagminus)
 	{
-		stock->size--;
-		ft_putchar(print);
-		ret++;
+		print = '0';
+		while (stock->size-- > 1)
+		{
+			ft_putchar(print);
+			ret++;
+		}
 	}
-	ft_putchar(c);
+	ft_putchar((char)c);
 	stock->size--;
 	if (stock->flagminus)
 		while (stock->size-- > 0)

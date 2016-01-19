@@ -6,16 +6,16 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 17:22:38 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 20:56:37 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/19 21:28:17 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-static	char	*remplimoitoucaencore(char *s1, int n, size_t size, int base)
+static	char	*remplimoitoucalong(char *s1, unsigned long n, unsigned int size, unsigned int base)
 {
-	size_t			index;
-	unsigned int	lol;
+	unsigned int	index;
+	unsigned long	lol;
 
 	index = 0;
 	lol = n;
@@ -29,15 +29,15 @@ static	char	*remplimoitoucaencore(char *s1, int n, size_t size, int base)
 	return (s1);
 }
 
-char			*ft_itoabaseprintf(unsigned int n, int base)
+char			*ft_longbase(unsigned long n, unsigned int base)
 {
-	unsigned int		test;
-	size_t	taille;
+	unsigned long		test;
+	unsigned int	taille;
 	char	*ret;
-
 	ret = NULL;
 	taille = 1;
 	test = n;
+
 	while (test / base != 0)
 	{
 		taille++;
@@ -45,7 +45,7 @@ char			*ft_itoabaseprintf(unsigned int n, int base)
 	}
 	ret = ft_strnew(taille);
 	if (ret)
-		ret = remplimoitoucaencore(ret, n, taille, base);
+		ret = remplimoitoucalong(ret, n, taille, base);
 	else
 		return (NULL);
 	return (ret);

@@ -6,13 +6,13 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 15:31:24 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/19 15:33:24 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int lastcheck(char *s, int nbr, sdp_list *stock)
+int maxlastcheck(char *s, sdp_list *stock)
 {
 	int ret;
 
@@ -36,7 +36,7 @@ int lastcheck(char *s, int nbr, sdp_list *stock)
 	return (ret + ft_strlen(s));
 }
 
-int checkrelou(char *s, int nbr, sdp_list *stock)
+int maxcheckrelou(char *s, intmax_t nbr, sdp_list *stock)
 {
 	int ret;
 
@@ -59,10 +59,10 @@ int checkrelou(char *s, int nbr, sdp_list *stock)
 			ret++;
 		}
 	}
-	return (ret + lastcheck(s, nbr,stock));
+	return (ret + maxlastcheck(s,stock));
 }
 
-int easyflags(char *s,int nbr, sdp_list *stock)
+int maxeasyflags(char *s, intmax_t nbr, sdp_list *stock)
 {
 	int ret;
 
@@ -83,30 +83,22 @@ int easyflags(char *s,int nbr, sdp_list *stock)
 			}
 	}
 	stock->size--;
-	return (ret + checkrelou(s, nbr, stock));
+	return (ret + maxcheckrelou(s, nbr, stock));
 }
 
 
-int	return_i(va_list ap, sdp_list *stock)
+int	return_maxi(va_list ap, sdp_list *stock)
 {
 	char *s;
-	int test;
+	intmax_t test;
 	int ret;
 
 
-	if (stock->flaglonglong == 1)
-		return(return_longlongi(ap, stock));
-	if (stock->flaglong == 1)
-		return(return_longi(ap, stock));
-//	if (stock->flagshort == 1)
-//		return(return_shorti(ap, stock));
-	if (stock->flagmax == 1)
-		return(return_maxi(ap, stock));
 	ret = 0;
-	test = va_arg(ap, int);
+	test = va_arg(ap, intmax_t);
 	s = ft_itoa(test);
 	ret = 0;
-	ret = easyflags(s, test, stock);
+	ret = maxeasyflags(s, test, stock);
 	return (ret);
 }
 
