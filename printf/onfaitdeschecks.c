@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:32:56 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 22:37:22 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 20:05:39 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 char	*move_format(char *format)
 {
-	if ((*format == 'l' && *(format + 1) == 'l') || (*format == 'h' && *(format + 1) == 'h'))
+	if ((*format == 'l' && *(format + 1) == 'l') ||
+			(*format == 'h' && *(format + 1) == 'h'))
 		return (format + 2);
 	if (ft_isdigit(*format) && *format != '0')
 	{
@@ -29,15 +30,17 @@ char	*move_format(char *format)
 			format++;
 		return (format);
 	}
-	return (++format);
+	return (format);
 }
 
-int		affichage(va_list ap, sdp_list *stock)
+int		affichage(va_list ap, t_sdp *stock)
 {
 	if (stock->fonction == '\0')
 		return (0);
+	if (stock->fonction == 'p')
+		return (return_llong_base(ap, stock, 16, 0));
 	if (stock->fonction == 'C')
-		return (return_C(ap, stock));
+		return (return_cc(ap, stock));
 	if (stock->fonction == 'D')
 		return (return_longi(ap, stock));
 	if (stock->fonction == 's')
@@ -59,7 +62,7 @@ int		affichage(va_list ap, sdp_list *stock)
 	return (0);
 }
 
-void	more_checks(char *format, va_list ap, sdp_list *stock)
+void	more_checks(char *format, va_list ap, t_sdp *stock)
 {
 	if (*format == 'h' && *(format + 1) == 'h')
 		stock->flagchar = 1;
@@ -73,21 +76,22 @@ void	more_checks(char *format, va_list ap, sdp_list *stock)
 		stock->flagmax = 1;
 	else if (*format == 'z')
 		stock->sizze = 1;
+	else if (*format == '0')
+		stock->flagzero = 1;
+	else if (*format == '+')
+		stock->flagplus = 1;
 }
-int		check_format(char *format, va_list ap, sdp_list *stock)
+
+int		check_format(char *format, va_list ap, t_sdp *stock)
 {
 	while (*format != stock->fonction)
 	{
 		if (ft_isdigit(*format) && *format != '0')
 			stock->size = ft_atoi(format);
-		else if (*format == '+')
-			stock->flagplus = 1;
 		else if (*format == '#')
 			stock->flagdiese = 1;
 		else if (*format == ' ')
 			stock->flagspace = 1;
-		else if (*format == '0')
-			stock->flagzero = 1;
 		else if (*format == '.')
 		{
 			stock->precision = 1;
@@ -95,11 +99,15 @@ int		check_format(char *format, va_list ap, sdp_list *stock)
 		}
 		else if (*format == '-')
 			stock->flagminus = 1;
-		else if (*format == 'h' || *format == 'l' || *format == 'z' || *format == 'j')
+		else if (*format == 'h' || *format == 'l' || *format == '0' ||
+				*format == 'z' || *format == 'j' || *format == '+')
 			more_checks(format, ap, stock);
+		else
+			return (-1);
+		
 		format = move_format(format);
 	}
-	if (stock->fonction == '%' && gnt(++format) != '%')
-		return(0);
+	if (stock->fonction == '%' && gnt(++format) != '%' && gnt(format))
+		return (-1);
 	return (affichage(ap, stock));
 }

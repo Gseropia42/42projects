@@ -6,18 +6,18 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 14:40:01 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/17 23:31:58 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 19:23:47 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	return_s_spaceflag(char *string, sdp_list *stock)
+int	return_s_spaceflag(char *string, t_sdp *stock)
 {
 	int ret;
 
 	ret = 0;
-	if (stock->precision)
+	if (stock->precision && stock->prec_size < ft_strlen(string))
 	{
 		while (stock->size-- > stock->prec_size)
 		{
@@ -36,7 +36,7 @@ int	return_s_spaceflag(char *string, sdp_list *stock)
 	return (ret);
 }
 
-int	return_s_minusflag(char *string, sdp_list *stock)
+int	return_s_minusflag(char *string, t_sdp *stock)
 {
 	int ret;
 
@@ -49,7 +49,7 @@ int	return_s_minusflag(char *string, sdp_list *stock)
 	return (ret);
 }
 
-int	return_text(char *string, sdp_list *stock)
+int	return_text(char *string, t_sdp *stock)
 {
 	int ret;
 
@@ -61,7 +61,6 @@ int	return_text(char *string, sdp_list *stock)
 			write(1, string++, 1);
 			ret++;
 			stock->size--;
-			return (ret);
 		}
 	}
 	else
@@ -73,7 +72,7 @@ int	return_text(char *string, sdp_list *stock)
 	return (ret);
 }
 
-int	return_s_zeroflag(char *string, sdp_list *stock)
+int	return_s_zeroflag(char *string, t_sdp *stock)
 {
 	int ret;
 
@@ -97,7 +96,7 @@ int	return_s_zeroflag(char *string, sdp_list *stock)
 	return (ret);
 }
 
-int	return_s(va_list ap, sdp_list *stock)
+int	return_s(va_list ap, t_sdp *stock)
 {
 	char *s;
 

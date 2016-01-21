@@ -6,15 +6,16 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 21:39:38 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 19:21:39 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	lastcheck_long_base(char *s, unsigned long nbr, sdp_list *stock)
+int	lastcheck_long_base(char *s, unsigned long nbr, t_sdp *stock)
 {
 	int ret;
+
 	ret = 0;
 	if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s))
@@ -34,7 +35,7 @@ int	lastcheck_long_base(char *s, unsigned long nbr, sdp_list *stock)
 	return (ret + ft_strlen(s));
 }
 
-int	check_l_diese(sdp_list *stock)
+int	check_l_diese(t_sdp *stock)
 {
 	write(1, "0", 1);
 	if (stock->fonction == 'x')
@@ -46,7 +47,7 @@ int	check_l_diese(sdp_list *stock)
 	return (1);
 }
 
-int	checkrelou_long_base(char *s, unsigned long nbr, sdp_list *stock)
+int	checkrelou_long_base(char *s, unsigned long nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -68,7 +69,7 @@ int	checkrelou_long_base(char *s, unsigned long nbr, sdp_list *stock)
 	return (ret + lastcheck_long_base(s, nbr, stock));
 }
 
-int	easyflags_long_base(char *s, unsigned long nbr, sdp_list *stock)
+int	easyflags_long_base(char *s, unsigned long nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -82,7 +83,7 @@ int	easyflags_long_base(char *s, unsigned long nbr, sdp_list *stock)
 				write(1, " ", 1);
 			}
 		else
-			while (stock->size-- > ft_strlen(s))
+			while (stock->size-- > ft_strlen(s) && stock->size > 0)
 			{
 				ret++;
 				write(1, " ", 1);
@@ -91,13 +92,14 @@ int	easyflags_long_base(char *s, unsigned long nbr, sdp_list *stock)
 	return (ret + checkrelou_long_base(s, nbr, stock));
 }
 
-int	return_long_base(va_list ap, sdp_list *stock, unsigned int base, int maj)
+int	return_long_base(va_list ap, t_sdp *stock, unsigned int base, int maj)
 {
 	unsigned long	nbr;
 	char			*s;
+
 	nbr = va_arg(ap, unsigned long);
 	if (maj == 0)
-	 	s = ft_longbase(nbr, base);
+		s = ft_longbase(nbr, base);
 	else
 		s = ft_itoabase_long_max(nbr, base);
 	if (stock->flagdiese && (stock->fonction == 'x' || stock->fonction == 'X'))

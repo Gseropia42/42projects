@@ -6,38 +6,38 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 17:22:38 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 21:30:52 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 19:29:10 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-static	char	*remplimoitoucalonglong(char *s1, unsigned long long n, unsigned int size, unsigned int base)
+char	*rg(char *p, unsigned long long n, unsigned int s, unsigned int b)
 {
-	unsigned int	index;
+	unsigned int		index;
 	unsigned long long	lol;
 
 	index = 0;
 	lol = n;
-	while (size > index && size)
+	while (s > index && s)
 	{
-		if ((s1[size - 1] = lol % base + '0') > 57)
-			s1[size - 1] = lol % base + '0' + 39;
-		lol = lol / base;
-		size--;
+		if ((p[s - 1] = lol % b + '0') > 57)
+			p[s - 1] = lol % b + '0' + 39;
+		lol = lol / b;
+		s--;
 	}
-	return (s1);
+	return (p);
 }
 
-char			*ft_longlongbase(unsigned long long n, unsigned int base)
+char	*ft_longlongbase(unsigned long long n, unsigned int base)
 {
-	unsigned long	long	test;
-	unsigned int	taille;
-	char	*ret;
+	unsigned long long	test;
+	unsigned int		taille;
+	char				*ret;
+
 	ret = NULL;
 	taille = 1;
 	test = n;
-
 	while (test / base != 0)
 	{
 		taille++;
@@ -45,7 +45,7 @@ char			*ft_longlongbase(unsigned long long n, unsigned int base)
 	}
 	ret = ft_strnew(taille);
 	if (ret)
-		ret = remplimoitoucalonglong(ret, n, taille, base);
+		ret = rg(ret, n, taille, base);
 	else
 		return (NULL);
 	return (ret);

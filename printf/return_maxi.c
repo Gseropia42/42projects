@@ -6,18 +6,17 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 15:33:24 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 19:22:17 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int maxlastcheck(char *s, sdp_list *stock)
+int	maxlastcheck(char *s, t_sdp *stock)
 {
 	int ret;
 
 	ret = 0;
-
 	if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s))
 		{
@@ -28,7 +27,7 @@ int maxlastcheck(char *s, sdp_list *stock)
 	ft_putstr(s);
 	stock->size = stock->size - ft_strlen(s);
 	if (stock->flagminus && stock->size)
-		while(stock->size-- > 0)
+		while (stock->size-- > 0)
 		{
 			write(1, " ", 1);
 			ret++;
@@ -36,7 +35,7 @@ int maxlastcheck(char *s, sdp_list *stock)
 	return (ret + ft_strlen(s));
 }
 
-int maxcheckrelou(char *s, intmax_t nbr, sdp_list *stock)
+int	maxcheckrelou(char *s, intmax_t nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -51,18 +50,19 @@ int maxcheckrelou(char *s, intmax_t nbr, sdp_list *stock)
 		write(1, " ", 1);
 		ret++;
 	}
-	if (stock->flagzero && !stock->precision && stock->size > 0 && !stock->flagminus)		
+	if (stock->flagzero && !stock->precision && stock->size > 0
+			&& !stock->flagminus)
 	{
-		while (stock->size-- >  ft_strlen(s))
+		while (stock->size-- > ft_strlen(s))
 		{
-			write(1 ,"0", 1);
+			write(1, "0", 1);
 			ret++;
 		}
 	}
-	return (ret + maxlastcheck(s,stock));
+	return (ret + maxlastcheck(s, stock));
 }
 
-int maxeasyflags(char *s, intmax_t nbr, sdp_list *stock)
+int	maxeasyflags(char *s, intmax_t nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -86,13 +86,11 @@ int maxeasyflags(char *s, intmax_t nbr, sdp_list *stock)
 	return (ret + maxcheckrelou(s, nbr, stock));
 }
 
-
-int	return_maxi(va_list ap, sdp_list *stock)
+int	return_maxi(va_list ap, t_sdp *stock)
 {
-	char *s;
-	intmax_t test;
-	int ret;
-
+	char		*s;
+	intmax_t	test;
+	int			ret;
 
 	ret = 0;
 	test = va_arg(ap, intmax_t);
@@ -101,4 +99,3 @@ int	return_maxi(va_list ap, sdp_list *stock)
 	ret = maxeasyflags(s, test, stock);
 	return (ret);
 }
-

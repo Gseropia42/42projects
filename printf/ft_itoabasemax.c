@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoabasemax.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/01/21 17:06:35 by gseropia          #+#    #+#             */
+/*   Updated: 2016/01/21 17:07:08 by gseropia         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libftprintf.h"
 
 static	char	*remplimoitoucaaussi(char *s1, int n, size_t size, int base)
@@ -10,7 +22,7 @@ static	char	*remplimoitoucaaussi(char *s1, int n, size_t size, int base)
 	lol = n;
 	while (size > index && size)
 	{
-		if((s1[size - 1] = lol % base + '0') > 57)
+		if ((s1[size - 1] = lol % base + '0') > 57)
 			s1[size - 1] = lol % base + '0' + 7;
 		lol = lol / base;
 		size--;
@@ -21,8 +33,8 @@ static	char	*remplimoitoucaaussi(char *s1, int n, size_t size, int base)
 char			*ft_itoabase_max(unsigned int n, int base)
 {
 	unsigned int	test;
-	size_t	taille;
-	char	*ret;
+	size_t			taille;
+	char			*ret;
 
 	ret = NULL;
 	taille = 1;

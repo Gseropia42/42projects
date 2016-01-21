@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 17:22:38 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 20:56:37 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 17:07:32 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static	char	*remplimoitoucaencore(char *s1, int n, size_t size, int base)
 char			*ft_itoabaseprintf(unsigned int n, int base)
 {
 	unsigned int		test;
-	size_t	taille;
-	char	*ret;
+	size_t				taille;
+	char				*ret;
 
 	ret = NULL;
 	taille = 1;

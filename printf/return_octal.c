@@ -6,13 +6,13 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 21:38:20 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 19:26:08 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	lastcheck_base(char *s, int nbr, sdp_list *stock)
+int	lastcheck_base(char *s, int nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -35,7 +35,7 @@ int	lastcheck_base(char *s, int nbr, sdp_list *stock)
 	return (ret + ft_strlen(s));
 }
 
-int	check_diese(sdp_list *stock)
+int	check_diese(t_sdp *stock)
 {
 	write(1, "0", 1);
 	if (stock->fonction == 'x')
@@ -47,7 +47,7 @@ int	check_diese(sdp_list *stock)
 	return (1);
 }
 
-int	checkrelou_base(char *s, int nbr, sdp_list *stock)
+int	checkrelou_base(char *s, int nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -55,7 +55,6 @@ int	checkrelou_base(char *s, int nbr, sdp_list *stock)
 	if (stock->flagdiese && nbr)
 	{
 		ret = check_diese(stock);
-		stock->size = stock->size - ret;
 	}
 	if (stock->flagzero && !stock->precision && stock->size > 0 \
 			&& !stock->flagminus)
@@ -69,7 +68,7 @@ int	checkrelou_base(char *s, int nbr, sdp_list *stock)
 	return (ret + lastcheck_base(s, nbr, stock));
 }
 
-int	easyflags_base(char *s, int nbr, sdp_list *stock)
+int	easyflags_base(char *s, int nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -83,7 +82,7 @@ int	easyflags_base(char *s, int nbr, sdp_list *stock)
 				write(1, " ", 1);
 			}
 		else
-			while (stock->size-- > ft_strlen(s))
+			while (stock->size-- > ft_strlen(s) && stock->size > 0)
 			{
 				ret++;
 				write(1, " ", 1);
@@ -92,15 +91,17 @@ int	easyflags_base(char *s, int nbr, sdp_list *stock)
 	return (ret + checkrelou_base(s, nbr, stock));
 }
 
-int	return_base(va_list ap, sdp_list *stock, int base, int maj)
+int	return_base(va_list ap, t_sdp *stock, int base, int maj)
 {
 	unsigned	int nbr;
 	char			*s;
-	if (stock->flaglonglong)
-		return(return_long_long_base(ap, stock, base, maj));
-	if (stock->flaglong)
-		return(return_long_base(ap , stock, base, maj));
 
+	if (stock->flaglonglong)
+		return (return_llong_base(ap, stock, base, maj));
+	if (stock->flaglong)
+		return (return_long_base(ap, stock, base, maj));
+	if (stock->flagmax)
+		return (return_maxbase(ap, stock, base, maj));
 	nbr = va_arg(ap, unsigned int);
 	if (maj == 0)
 		s = ft_itoabaseprintf(nbr, base);

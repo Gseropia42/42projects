@@ -6,13 +6,13 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:29:54 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 19:24:50 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	lastcheck_long_long_base(char *s, unsigned long long nbr, t_sdp *stock)
+int	lastcheck_max_base(char *s, uintmax_t nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -35,12 +35,10 @@ int	lastcheck_long_long_base(char *s, unsigned long long nbr, t_sdp *stock)
 	return (ret + ft_strlen(s));
 }
 
-int	check_l_l_diese(t_sdp *stock, unsigned long long nbr)
+int	check_max_diese(t_sdp *stock)
 {
-	if (!nbr && stock->fonction != 'p')
-		return (0);
 	write(1, "0", 1);
-	if (stock->fonction == 'x' || stock->fonction == 'p')
+	if (stock->fonction == 'x')
 		write(1, "x", 1);
 	if (stock->fonction == 'X')
 		write(1, "X", 1);
@@ -49,13 +47,16 @@ int	check_l_l_diese(t_sdp *stock, unsigned long long nbr)
 	return (1);
 }
 
-int	checkrelou_long_long_base(char *s, unsigned long long nbr, t_sdp *stock)
+int	checkrelou_max_base(char *s, uintmax_t nbr, t_sdp *stock)
 {
 	int ret;
 
 	ret = 0;
-	if (stock->flagdiese)
-		ret = check_l_l_diese(stock, nbr);
+	if (stock->flagdiese && nbr)
+	{
+		ret = check_max_diese(stock);
+		stock->size = stock->size - ret;
+	}
 	if (stock->flagzero && !stock->precision && stock->size > 0 \
 			&& !stock->flagminus)
 	{
@@ -65,10 +66,10 @@ int	checkrelou_long_long_base(char *s, unsigned long long nbr, t_sdp *stock)
 			ret++;
 		}
 	}
-	return (ret + lastcheck_long_long_base(s, nbr, stock));
+	return (ret + lastcheck_max_base(s, nbr, stock));
 }
 
-int	easyflags_long_long_base(char *s, unsigned long long nbr, t_sdp *stock)
+int	easyflags_max_base(char *s, uintmax_t nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -82,32 +83,29 @@ int	easyflags_long_long_base(char *s, unsigned long long nbr, t_sdp *stock)
 				write(1, " ", 1);
 			}
 		else
-			while (stock->size-- > ft_strlen(s) && stock->size > 0)
+			while (stock->size-- > ft_strlen(s))
 			{
 				ret++;
 				write(1, " ", 1);
 			}
 	}
-	return (ret + checkrelou_long_long_base(s, nbr, stock));
+	return (ret + checkrelou_max_base(s, nbr, stock));
 }
 
-int	return_llong_base(va_list ap, t_sdp *stock, unsigned int base, int maj)
+int	return_maxbase(va_list ap, t_sdp *stock, unsigned int base, int maj)
 {
-	unsigned long long	nbr;
-	char				*s;
+	unsigned long	nbr;
+	char			*s;
 
-	nbr = va_arg(ap, unsigned long long);
-	if (stock->fonction == 'p')
-		stock->flagdiese = 1;
+	nbr = va_arg(ap, uintmax_t);
 	if (maj == 0)
-		s = ft_longlongbase(nbr, base);
+		s = ft_longbase(nbr, base);
 	else
-		s = ft_itoabase_long_long_max(nbr, base);
-	if (stock->flagdiese && (stock->fonction == 'x' ||
-				stock->fonction == 'X' || stock->fonction == 'p'))
+		s = ft_itoabase_long_max(nbr, base);
+	if (stock->flagdiese && (stock->fonction == 'x' || stock->fonction == 'X'))
 		stock->size = stock->size - 2;
-	else if (stock->flagdiese && \
+	else if (stock->flagdiese &&
 		(stock->fonction == 'o' || stock->fonction == 'O'))
 		stock->size = stock->size - 1;
-	return (easyflags_long_long_base(s, nbr, stock));
+	return (easyflags_max_base(s, nbr, stock));
 }

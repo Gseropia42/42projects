@@ -6,18 +6,17 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/19 15:37:05 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 19:20:07 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int lllastcheck(char *s, sdp_list *stock)
+int	lllastcheck(char *s, t_sdp *stock)
 {
 	int ret;
 
 	ret = 0;
-
 	if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s))
 		{
@@ -28,7 +27,7 @@ int lllastcheck(char *s, sdp_list *stock)
 	ft_putstr(s);
 	stock->size = stock->size - ft_strlen(s);
 	if (stock->flagminus && stock->size)
-		while(stock->size-- > 0)
+		while (stock->size-- > 0)
 		{
 			write(1, " ", 1);
 			ret++;
@@ -36,7 +35,7 @@ int lllastcheck(char *s, sdp_list *stock)
 	return (ret + ft_strlen(s));
 }
 
-int llcheckrelou(char *s, long long nbr, sdp_list *stock)
+int	llcheckrelou(char *s, long long nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -51,18 +50,19 @@ int llcheckrelou(char *s, long long nbr, sdp_list *stock)
 		write(1, " ", 1);
 		ret++;
 	}
-	if (stock->flagzero && !stock->precision && stock->size > 0 && !stock->flagminus)		
+	if (stock->flagzero && !stock->precision && stock->size > 0
+			&& !stock->flagminus)
 	{
-		while (stock->size-- >  ft_strlen(s))
+		while (stock->size-- > ft_strlen(s))
 		{
-			write(1 ,"0", 1);
+			write(1, "0", 1);
 			ret++;
 		}
 	}
 	return (ret + lllastcheck(s, stock));
 }
 
-int lleasyflags(char *s, long long nbr, sdp_list *stock)
+int	lleasyflags(char *s, long long nbr, t_sdp *stock)
 {
 	int ret;
 
@@ -86,11 +86,11 @@ int lleasyflags(char *s, long long nbr, sdp_list *stock)
 	return (ret + llcheckrelou(s, nbr, stock));
 }
 
-int	return_longlongi(va_list ap, sdp_list *stock)
+int	return_longlongi(va_list ap, t_sdp *stock)
 {
-	char *s;
-	long long test;
-	int ret;
+	char		*s;
+	long long	test;
+	int			ret;
 
 	ret = 0;
 	test = va_arg(ap, long long);
@@ -99,4 +99,3 @@ int	return_longlongi(va_list ap, sdp_list *stock)
 	ret = lleasyflags(s, test, stock);
 	return (ret);
 }
-
