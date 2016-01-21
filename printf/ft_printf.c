@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:15:27 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 20:08:03 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 20:57:21 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,6 @@ int			checkflagada(const char *format)
 	return (0);
 }
 
-int			ft_printf_next(const char *format, va_list ap)
-{
-	int			ret;
-
-	
-	ret = 0;
-	return (ret);
-}
-
 int			ft_printf(const char *format, ...)
 {
 	int			ret;
@@ -133,13 +124,13 @@ int			ft_printf(const char *format, ...)
 				}
 				if (*format == '\0')
 					return (ret);
-				format++;
 			}
 			else
 				while (checkflagada(format) && *format)
 					format++;
 			free(stock);
 		}
+
 	}
 	va_end(ap);
 	return (ret);

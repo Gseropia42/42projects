@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 14:25:08 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:19:09 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 20:57:05 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	return_cs(char c, t_sdp *stock)
 {
 	int ret;
 
-	ret = 0;
+	ret = 1;
 	ft_putchar(c);
 	stock->size--;
 	if (stock->flagminus)

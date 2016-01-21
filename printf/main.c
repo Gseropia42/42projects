@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 11:49:23 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:47:28 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/21 20:44:53 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int main()
 	ft_putchar('\n');
 //	d =	printf("o%.2..s", "t");
 //	e =ft_printf("m%.2..s", "t");
-	e = ft_printf("m%33.d %5s\n", 54 , "paulo");
-	d = printf("o%.d, %.0d\n", 0, 0);
+	e = ft_printf("m%5%\n");
+	d = printf("o%5%\n");
 	ft_putchar('\n');
-	ft_putnbr(d);
+//	ft_putnbr(d);
 	ft_putchar('\n');
-	ft_putnbr(e);
+//	ft_putnbr(e);
 	ft_putchar('\n');
 //	printf("%#lx\n" , d);
 //	printf("%p\n" , f);
