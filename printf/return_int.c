@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:19:29 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/22 17:17:11 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,17 +99,26 @@ int	return_i(va_list ap, t_sdp *stock)
 	int		test;
 	int		ret;
 
+	if (stock->flagmax == 1)
+		return (return_maxi(ap, stock));
 	if (stock->flaglonglong == 1)
 		return (return_longlongi(ap, stock));
 	if (stock->flaglong == 1)
 		return (return_longi(ap, stock));
-	if (stock->flagmax == 1)
-		return (return_maxi(ap, stock));
 	ret = 0;
 	test = va_arg(ap, int);
-	s = ft_itoa(test);
+	if (stock->flagshort && test > 32767)
+		test = test - 32768 - 32768;
+	if (stock->flagchar)
+	{
+		if (test < -128)
+			test = test + 256;
+		else if (test > 127)
+			test = test - 256;
+	}
 	if (test < 0)
 		stock->prec_size++;
+	s = ft_itoa(test);
 	ret = 0;
 	ret = easyflags(s, test, stock);
 	return (ret);

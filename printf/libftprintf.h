@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 14:26:03 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/22 15:48:33 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/22 17:12:33 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "libft/libft.h"
 # include <wchar.h>
 # include <limits.h>
-
+#include <inttypes.h>
 typedef	struct	t_sdp
 {
 	char	fonction;

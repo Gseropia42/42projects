@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:19:47 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/22 17:18:05 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,11 @@ int	longeasyflags(char *s, long nbr, t_sdp *stock)
 int	return_longi(va_list ap, t_sdp *stock)
 {
 	char	*s;
-	long	test;
+	unsigned long long		test;
 	int		ret;
 
 	ret = 0;
-	test = va_arg(ap, long);
+	test = va_arg(ap, unsigned long long);
 	s = ft_itoa(test);
 	ret = 0;
 	ret = longeasyflags(s, test, stock);
