@@ -6,27 +6,13 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:15:27 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 20:57:21 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/22 15:54:54 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-char		get_next_type(char *format)
-{
-	char *s;
-
-	s = ft_strnew(15);
-	s = "%sSdDpoOxXcCuUi";
-	while (*s)
-	{
-		if (*s++ == *format)
-			return (*format);
-	}
-	return ('\0');
-}
-
-char		gnt(char *format)
+char		gnt(char *format, int check)
 {
 	char *s;
 	char *temp;
@@ -39,19 +25,24 @@ char		gnt(char *format)
 		while (*s)
 		{
 			if (*s++ == *format)
+			{
 				return (*format);
+			}
 		}
+		if (check == 0)
+			return ('\0');
 		s = temp;
 		format++;
 	}
 	return ('\0');
 }
 
-t_sdp	*stocktoutca(t_sdp **list)
+t_sdp		*stocktoutca(t_sdp **list, int ret)
 {
 	t_sdp *stock;
 
 	stock = malloc(sizeof(t_sdp));
+	stock->temp = ret;
 	stock->fonction = 0;
 	stock->flagminus = 0;
 	stock->flagdiese = 0;
@@ -80,58 +71,50 @@ int			checkflagada(const char *format)
 	while (*s)
 	{
 		if (*s++ == *format)
+		{
 			return (1);
+		}
 	}
 	return (0);
+}
+
+int			callprint(const char *f, t_sdp *s, va_list ap, int ret)
+{
+	while (*f)
+	{
+		if (*f != '%' && ++ret)
+			write(1, f++, 1);
+		else
+		{
+			s = stocktoutca(&s, ret);
+			if ((s->fonction = gnt((char*)++f, 1)))
+				if ((ret = ret + cf((char*)f, ap, s)) == s->temp - 1 && ret++)
+					while (checkflagada(f) && *f)
+						f++;
+				else
+				{
+					while (!gnt((char*)f, 0) && *f && *(f + 1))
+						f++;
+					f++;
+				}
+			else
+				while (checkflagada(f) && *f)
+					f++;
+			free(s);
+		}
+	}
+	return (ret);
 }
 
 int			ft_printf(const char *format, ...)
 {
 	int			ret;
-	int			temp;
 	va_list		ap;
-	char		fctn;
 	t_sdp		*stock;
 
 	va_start(ap, format);
 	ret = 0;
-	temp = ret;
-	while (*format)
-	{
-		if (*format != '%')
-		{
-			write(1, format++, 1);
-			ret++;
-		}
-		else
-		{
-			temp = ret;
-			stock = stocktoutca(&stock);
-			if ((stock->fonction = gnt((char*)++format)))
-			{
-				ret = ret + check_format((char*)format, ap, stock);
-				if (ret == temp - 1)
-				{
-					ret++;
-					while (checkflagada(format) && *format)
-						format++;
-				}
-				else
-				{
-					while (!get_next_type((char*)format) && *format)
-						format++;
-					format++;
-				}
-				if (*format == '\0')
-					return (ret);
-			}
-			else
-				while (checkflagada(format) && *format)
-					format++;
-			free(stock);
-		}
-
-	}
+	ret = callprint(format, stock, ap, ret);
 	va_end(ap);
 	return (ret);
 }

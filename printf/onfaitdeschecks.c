@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:32:56 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 20:58:11 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/22 15:49:12 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	more_checks(char *format, va_list ap, t_sdp *stock)
 		stock->flagplus = 1;
 }
 
-int		check_format(char *format, va_list ap, t_sdp *stock)
+int		cf(char *format, va_list ap, t_sdp *stock)
 {
 	while (*format != stock->fonction)
 	{
@@ -106,7 +106,7 @@ int		check_format(char *format, va_list ap, t_sdp *stock)
 			return (-1);
 		format = move_format(format);
 	}
-	if (stock->fonction == '%' && gnt(++format) != '%' && gnt(format))
+	if (stock->fonction == '%' && gnt(++format, 1) != '%' && gnt(format, 1))
 		return (-1);
 	return (affichage(ap, stock));
 }

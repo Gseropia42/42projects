@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 14:26:03 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:20:39 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/22 15:48:33 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,17 @@ typedef	struct	t_sdp
 	int		flagshort; // h
 	int		flagchar; // hh
 	int		sizze; // z
+	int		temp;
 }				t_sdp;
 
 int			return_p(va_list ap, t_sdp *stock);
-char		gnt(char *format);
+char		gnt(char *format, int check);
 char		*ft_longlongbase(unsigned long long n, unsigned int base);
 char		*ft_longbase(unsigned long n, unsigned int base);
 void		more_checks(char *format, va_list ap, t_sdp *stock);
 char		*ft_itoabaseprintf(unsigned int n, int base);
 char		get_next_type(char*format);
-int			check_format(char *format, va_list ap, t_sdp *stock);
+int			cf(char *format, va_list ap, t_sdp *stock);
 int			test_du_zero(va_list(ap));
 int			return_flags(const char *apply, va_list ap);
 int			check_precision(const char *format, va_list ap);

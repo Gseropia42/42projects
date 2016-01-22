@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 11:49:23 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 20:44:53 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/22 15:08:09 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,25 @@
 
 int main()
 {
-	int d;
+/*	int d;
 	int e;
-/*	void *f;
+	void *f;
 
 	q
-	q
-	d = ft_printf("%jx\n", 4294967296);
-	e = printf("%jx\n", 4294967296);
-	ft_putnbr(d);
-	ft_putchar('\n');
-	ft_putnbr(e);
+	q*/
+	 ft_printf("%jx\n", 4294967296);
+//	e = printf("%jx\n", 4294967296);
+//	ft_putnbr(d);
+//	ft_putchar('\n');
+//	ft_putnbr(e);
 	
-*///	void *f;
+//	void *f;
 //	unsigned int d = 1488526296;
 	ft_putchar('\n');
 //	d =	printf("o%.2..s", "t");
-//	e =ft_printf("m%.2..s", "t");
-	e = ft_printf("m%5%\n");
-	d = printf("o%5%\n");
+	ft_printf("m%.2..s", "t");
+	ft_printf("m%5%\n");
+//	d = printf("o%5%\n");
 	ft_putchar('\n');
 //	ft_putnbr(d);
 	ft_putchar('\n');
