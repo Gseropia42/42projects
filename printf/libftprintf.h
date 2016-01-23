@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 14:26:03 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/22 17:12:33 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 13:55:36 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ typedef	struct	t_sdp
 	int		sizze; // z
 	int		temp;
 }				t_sdp;
-
 int			return_p(va_list ap, t_sdp *stock);
+char		*ft_longlongitoa(long long n);
+char		*ft_longitoa(long n);
+char		*ft_maxtoa(intmax_t n);
 char		gnt(char *format, int check);
 char		*ft_longlongbase(unsigned long long n, unsigned int base);
 char		*ft_longbase(unsigned long n, unsigned int base);
@@ -53,13 +55,13 @@ int			return_i(va_list ap, t_sdp *stock);
 int			return_longi(va_list ap, t_sdp *stock);
 int			return_longlongi(va_list ap, t_sdp *stock);
 int			return_maxi(va_list ap, t_sdp *stock);
+int			return_long_s(va_list ap, t_sdp *stock);
 int			return_s(va_list ap, t_sdp *stock);
 int			return_cc(va_list ap, t_sdp *stock);
 int			return_c(va_list ap, t_sdp *stock);
 int			return_i(va_list ap, t_sdp *stock);
 int			ft_is_a_flag(const char *format);
 int			ft_printf(const char *format, ...);
-int			check_diese(t_sdp *stock);
 int			return_base(va_list ap, t_sdp *stock, int base, int maj);
 int			return_llong_base(va_list ap, t_sdp *stock, unsigned int base, int maj);
 int			return_maxbase(va_list ap, t_sdp *stock, unsigned int base, int maj);

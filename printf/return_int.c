@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/22 17:17:11 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 15:22:51 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 int	lastcheck(char *s, int nbr, t_sdp *stock)
 {
 	int ret;
+	char temp[1];
 
 	ret = 0;
-	if (stock->precision)
+	temp[0] = '\0';
+	if (!stock->prec_size && stock->precision && !nbr)
+		s = temp;
+	else if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s) && stock->prec_size > 0)
 		{
 			write(1, "0", 1);
@@ -66,9 +70,13 @@ int	checkrelou(char *s, int nbr, t_sdp *stock)
 
 int	easyflags(char *s, int nbr, t_sdp *stock)
 {
-	int ret;
+	int		ret;
+	char	temp[1];
 
+	temp[0] = '\0';
 	ret = 0;
+	if (!stock->prec_size && stock->precision && !nbr)
+		s = temp;
 	if (stock->flagspace && !stock->flagplus && nbr > 0)
 	{
 		write(1, " ", 1);
@@ -78,18 +86,11 @@ int	easyflags(char *s, int nbr, t_sdp *stock)
 	if (stock->flagplus && nbr >= 0)
 		stock->size--;
 	if (stock->size > 0 && !stock->flagminus && stock->precision)
-		while (stock->size > ft_strlen(s) && stock->size-- > (stock->prec_size))
-		{
-			ret++;
+		while (stock->size > ft_strlen(s) && stock->size-- > (stock->prec_size) && ++ret)
 			write(1, " ", 1);
-		}
 	if (stock->size > 0 && !stock->flagminus && !stock->precision)
-		while (!stock->flagzero && stock->size > (ft_strlen(s)))
-		{
-			stock->size--;
-			ret++;
+		while (stock->size > 0 && !stock->flagzero && stock->size-- > (ft_strlen(s)) && ++ret)
 			write(1, " ", 1);
-		}
 	return (ret + checkrelou(s, nbr, stock));
 }
 
@@ -99,10 +100,10 @@ int	return_i(va_list ap, t_sdp *stock)
 	int		test;
 	int		ret;
 
-	if (stock->flagmax == 1)
-		return (return_maxi(ap, stock));
 	if (stock->flaglonglong == 1)
 		return (return_longlongi(ap, stock));
+	if (stock->flagmax == 1)
+		return (return_maxi(ap, stock));
 	if (stock->flaglong == 1)
 		return (return_longi(ap, stock));
 	ret = 0;
@@ -119,7 +120,6 @@ int	return_i(va_list ap, t_sdp *stock)
 	if (test < 0)
 		stock->prec_size++;
 	s = ft_itoa(test);
-	ret = 0;
 	ret = easyflags(s, test, stock);
 	return (ret);
 }

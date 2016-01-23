@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:29:54 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 11:28:04 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 int	lastcheck_long_long_base(char *s, unsigned long long nbr, t_sdp *stock)
 {
-	int ret;
+	int 	ret;
+	char	temp[1];
 
+	temp[0] = '\0';
 	ret = 0;
+	if (!stock->prec_size && stock->precision && !nbr)
+		s = temp;
 	if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s))
 		{

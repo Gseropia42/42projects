@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/22 16:59:59 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 13:24:42 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 int	lastcheck_base(char *s, int nbr, t_sdp *stock)
 {
-	int ret;
+	int		ret;
+	char	temp[1];
 
+	temp[0] = '\0';
 	ret = 0;
+	if (((!stock->prec_size && stock->precision) || stock->flagdiese == -1) && !nbr)
+			s = temp;
 	if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s))
 		{
@@ -35,13 +39,23 @@ int	lastcheck_base(char *s, int nbr, t_sdp *stock)
 	return (ret + ft_strlen(s));
 }
 
-int	check_diese(t_sdp *stock)
+int	check_diese(t_sdp *stock, int nbr)
 {
-	write(1, "0", 1);
+	if (stock->fonction == 'o' || stock->fonction == 'O')
+	{
+		write(1, "0", 1);
+		if (!nbr)
+		{
+			stock->flagdiese = -1;
+			return(1);
+		}
+	}
+	if (!nbr)
+		return (0);
 	if (stock->fonction == 'x')
-		write(1, "x", 1);
+		write(1, "0x", 2);
 	if (stock->fonction == 'X')
-		write(1, "X", 1);
+		write(1, "0X", 2);
 	if (stock->fonction == 'X' || stock->fonction == 'x')
 		return (2);
 	return (1);
@@ -52,9 +66,9 @@ int	checkrelou_base(char *s, int nbr, t_sdp *stock)
 	int ret;
 
 	ret = 0;
-	if (stock->flagdiese && nbr)
+	if (stock->flagdiese)
 	{
-		ret = check_diese(stock);
+		ret = check_diese(stock, nbr);
 	}
 	if (stock->flagzero && !stock->precision && stock->size > 0 \
 			&& !stock->flagminus)
@@ -71,8 +85,12 @@ int	checkrelou_base(char *s, int nbr, t_sdp *stock)
 int	easyflags_base(char *s, int nbr, t_sdp *stock)
 {
 	int ret;
+	char	temp[1];
 
+	temp[0] = '\0';
 	ret = 0;
+	if (!stock->prec_size && stock->precision && !nbr)
+			s = temp;
 	if (stock->size && !stock->flagminus && !stock->flagzero)
 	{
 		if (stock->precision && stock->prec_size > ft_strlen(s))
@@ -82,7 +100,7 @@ int	easyflags_base(char *s, int nbr, t_sdp *stock)
 				write(1, " ", 1);
 			}
 		else
-			while (stock->size-- > ft_strlen(s) && stock->size > 0)
+			while (stock->size > 0 && stock->size-- > ft_strlen(s))
 			{
 				ret++;
 				write(1, " ", 1);
@@ -95,10 +113,10 @@ int	return_base(va_list ap, t_sdp *stock, int base, int maj)
 {
 	unsigned	int nbr;
 	char			*s;
-
+	
 	if (stock->flaglonglong)
 		return (return_llong_base(ap, stock, base, maj));
-	if (stock->flaglong)
+	if (stock->flaglong || stock->fonction == 'O')
 		return (return_long_base(ap, stock, base, maj));
 	if (stock->flagmax)
 		return (return_maxbase(ap, stock, base, maj));

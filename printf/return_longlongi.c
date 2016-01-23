@@ -6,17 +6,21 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:20:07 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 13:51:13 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	lllastcheck(char *s, t_sdp *stock)
+int	lllastcheck(char *s, t_sdp *stock, long long nbr)
 {
-	int ret;
+	int 	ret;
+	char	temp[1];
 
+	temp[0] = '\0';
 	ret = 0;
+	if (!stock->prec_size && stock->precision && !nbr)
+		s = temp;
 	if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s))
 		{
@@ -59,7 +63,7 @@ int	llcheckrelou(char *s, long long nbr, t_sdp *stock)
 			ret++;
 		}
 	}
-	return (ret + lllastcheck(s, stock));
+	return (ret + lllastcheck(s, stock, nbr));
 }
 
 int	lleasyflags(char *s, long long nbr, t_sdp *stock)
@@ -94,7 +98,7 @@ int	return_longlongi(va_list ap, t_sdp *stock)
 
 	ret = 0;
 	test = va_arg(ap, long long);
-	s = ft_itoa(test);
+	s = ft_longlongitoa(test);
 	ret = 0;
 	ret = lleasyflags(s, test, stock);
 	return (ret);

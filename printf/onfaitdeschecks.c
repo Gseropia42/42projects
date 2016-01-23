@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:32:56 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/22 17:03:34 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 11:13:04 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ int		affichage(va_list ap, t_sdp *stock)
 		return (return_cc(ap, stock));
 	if (stock->fonction == 'D')
 		return (return_longi(ap, stock));
-	if (stock->fonction == 's')
+	if (stock->fonction == 's' || stock->fonction == 'S')
 		return (return_s(ap, stock));
 	if (stock->fonction == 'd' || stock->fonction == 'i')
 		return (return_i(ap, stock));
 	if (stock->fonction == 'c' || stock->fonction == '%')
 		return (return_c(ap, stock));
-	if (stock->fonction == 'o')
+	if (stock->fonction == 'o' || stock->fonction == 'O')
 		return (return_base(ap, stock, 8, 0));
 	if (stock->fonction == 'x')
 		return (return_base(ap, stock, 16, 0));
@@ -96,6 +96,7 @@ int		cf(char *format, va_list ap, t_sdp *stock)
 		{
 			stock->precision = 1;
 			stock->prec_size = ft_atoi(++format);
+			format--;
 		}
 		else if (*format == '-')
 			stock->flagminus = 1;

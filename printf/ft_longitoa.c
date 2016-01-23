@@ -1,52 +1,59 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoabaselongmax.c                               :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/21 17:05:45 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 13:40:19 by gseropia         ###   ########.fr       */
+/*   Created: 2015/11/27 17:37:39 by gseropia          #+#    #+#             */
+/*   Updated: 2016/01/23 13:47:34 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-static	char	*remplilong(char *s1, unsigned long n, size_t size, int base)
+static	char	*remplimoitouca(char *s1, long n, size_t size)
 {
 	size_t			index;
 	unsigned long	lol;
 
 	index = 0;
 	lol = 0;
+	if (n < 0)
+	{
+		s1[0] = '-';
+		index++;
+		n = -n;
+	}
 	lol = n;
 	while (size > index && size)
 	{
-		if ((s1[size - 1] = lol % base + '0') > 57)
-			s1[size - 1] = lol % base + '0' + 7;
-		lol = lol / base;
+		s1[size - 1] = lol % 10 + '0';
+		lol = lol / 10;
 		size--;
 	}
 	return (s1);
 }
 
-char			*ft_itoabase_long_max(unsigned long n, int base)
+char			*ft_longitoa(long n)
 {
-	unsigned long	test;
-	size_t			taille;
-	char			*ret;
+	long	test;
+	size_t	taille;
+	char	*ret;
 
 	ret = NULL;
 	taille = 1;
 	test = n;
-	while (test / base != 0)
+	if (n < 0)
+		taille++;
+	while (test / 10 != 0)
 	{
 		taille++;
-		test = test / base;
+		test = test / 10;
 	}
 	ret = ft_strnew(taille);
 	if (ret)
-		ret = remplilong(ret, n, taille, base);
+		ret = remplimoitouca(ret, n, taille);
 	else
 		return (NULL);
 	return (ret);

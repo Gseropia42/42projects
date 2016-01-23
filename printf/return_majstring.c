@@ -6,18 +6,18 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 14:40:01 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 13:08:01 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 11:11:07 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	return_s_spaceflag(char *string, t_sdp *stock)
+int	return_l_s_spaceflag(wchar_t *string, t_sdp *stock, int taille)
 {
 	int ret;
 
 	ret = 0;
-	if (stock->precision && stock->prec_size < ft_strlen(string))
+	if (stock->precision && stock->prec_size < taille)
 	{
 		while (stock->size-- > stock->prec_size)
 		{
@@ -27,7 +27,7 @@ int	return_s_spaceflag(char *string, t_sdp *stock)
 	}
 	else
 	{
-		while (stock->size-- > ft_strlen(string))
+		while (stock->size-- > taille)
 		{
 			write(1, " ", 1);
 			ret++;
@@ -36,7 +36,7 @@ int	return_s_spaceflag(char *string, t_sdp *stock)
 	return (ret);
 }
 
-int	return_s_minusflag(char *string, t_sdp *stock)
+int	return_l_s_minusflag(wchar_t *string, t_sdp *stock)
 {
 	int ret;
 
@@ -49,7 +49,7 @@ int	return_s_minusflag(char *string, t_sdp *stock)
 	return (ret);
 }
 
-int	return_text(char *string, t_sdp *stock)
+int	return_l_text(wchar_t *string, t_sdp *stock)
 {
 	int ret;
 
@@ -65,19 +65,22 @@ int	return_text(char *string, t_sdp *stock)
 	}
 	else
 	{
-		ft_putstr(string);
-		ret = ft_strlen(string);
+		while (*string)
+		{
+			write(1, string++, 1);
+			ret++;
+		}
 		stock->size = stock->size - ret;
 	}
 	return (ret);
 }
 
-int	return_s_zeroflag(char *string, t_sdp *stock)
+int	return_l_s_zeroflag(wchar_t *string, t_sdp *stock, int taille)
 {
 	int ret;
 
 	ret = 0;
-	if (stock->precision && stock->prec_size < ft_strlen(string))
+	if (stock->precision && stock->prec_size < taille)
 	{
 		while (stock->size-- > stock->prec_size)
 		{
@@ -87,7 +90,7 @@ int	return_s_zeroflag(char *string, t_sdp *stock)
 	}
 	else
 	{
-		while (stock->size-- > ft_strlen(string))
+		while (stock->size-- > taille)
 		{
 			write(1, "0", 1);
 			ret++;
@@ -96,26 +99,29 @@ int	return_s_zeroflag(char *string, t_sdp *stock)
 	return (ret);
 }
 
-int	return_s(va_list ap, t_sdp *stock)
+int	return_long_s(va_list ap, t_sdp *stock)
 {
-	char *s;
-	
-	s = NULL;
-	if (stock->flaglong || stock->fonction == 'S')
-		return(return_long_s(ap ,stock));
-	s = va_arg(ap, char*);
+	wchar_t	*s;
+	int		t;
+	wchar_t	*temp;
+
+	t = 0;
+	s = va_arg(ap, wchar_t *);
+	temp = s;
+	while (*temp++)
+		t++;
 	if (s == NULL)
 	{
 		ft_putstr("(null)");
 		return (6);
 	}
 	if (stock->flagzero && !stock->flagminus && stock->size)
-		return (return_s_zeroflag(s, stock) + return_text(s, stock));
+		return (return_l_s_zeroflag(s, stock, t) + return_l_text(s, stock));
 	if (stock->flagminus && stock->size)
-		return (return_text(s, stock) + return_s_minusflag(s, stock));
+		return (return_l_text(s, stock) + return_l_s_minusflag(s, stock));
 	if (stock->size)
-		return (return_s_spaceflag(s, stock) + return_text(s, stock));
+		return (return_l_s_spaceflag(s, stock, t) + return_l_text(s, stock));
 	else
-		return (return_text(s, stock));
+		return (return_l_text(s, stock));
 	return (0);
 }

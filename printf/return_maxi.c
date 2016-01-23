@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:22:17 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/23 13:55:40 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	return_maxi(va_list ap, t_sdp *stock)
 
 	ret = 0;
 	test = va_arg(ap, intmax_t);
-	s = ft_itoa(test);
+	s = ft_maxtoa(test);
 	ret = 0;
 	ret = maxeasyflags(s, test, stock);
 	return (ret);
