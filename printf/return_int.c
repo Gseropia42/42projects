@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 15:22:51 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/24 20:19:06 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	easyflags(char *s, int nbr, t_sdp *stock)
 	ret = 0;
 	if (!stock->prec_size && stock->precision && !nbr)
 		s = temp;
-	if (stock->flagspace && !stock->flagplus && nbr > 0)
+	if (stock->flagspace && !stock->flagplus && nbr >= 0)
 	{
 		write(1, " ", 1);
 		ret++;

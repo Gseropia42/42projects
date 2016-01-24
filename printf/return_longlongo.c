@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 11:28:04 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/24 20:13:26 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_l_l_diese(t_sdp *stock, unsigned long long nbr)
 		write(1, "x", 1);
 	if (stock->fonction == 'X')
 		write(1, "X", 1);
-	if (stock->fonction == 'X' || stock->fonction == 'x')
+	if (stock->fonction == 'X' || stock->fonction == 'x' || stock->fonction == 'p')
 		return (2);
 	return (1);
 }
