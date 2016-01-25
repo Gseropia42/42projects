@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/27 17:37:39 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 13:59:58 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 16:40:57 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static	char	*remplimoitouca(char *s1, intmax_t n, size_t size)
 {
 	size_t			index;
+	unsigned long long		lol;
 
 	index = 0;
 	if (n < 0)
@@ -23,10 +24,11 @@ static	char	*remplimoitouca(char *s1, intmax_t n, size_t size)
 		index++;
 		n = -n;
 	}
+	lol = n;
 	while (size > index && size)
 	{
-		s1[size - 1] = n % 10 + '0';
-		n = n / 10;
+		s1[size - 1] = lol % 10 + '0';
+		lol = lol / 10;
 		size--;
 	}
 	return (s1);

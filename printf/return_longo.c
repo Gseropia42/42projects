@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 11:28:42 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 12:18:02 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	lastcheck_long_base(char *s, unsigned long nbr, t_sdp *stock)
 
 	temp[0] = '\0';
 	ret = 0;
-	if (!stock->prec_size && stock->precision && !nbr)
+	if (((!stock->prec_size && stock->precision) || stock->flagdiese == -1) && !nbr)
 		s = temp;
 	if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s))
@@ -39,13 +39,24 @@ int	lastcheck_long_base(char *s, unsigned long nbr, t_sdp *stock)
 	return (ret + ft_strlen(s));
 }
 
-int	check_l_diese(t_sdp *stock)
+int	check_l_diese(t_sdp *stock, int nbr)
 {
-	write(1, "0", 1);
+	if (stock->fonction == 'o' || stock->fonction == 'O')
+	{
+		write(1, "0", 1);
+		if (!nbr)
+		{
+			stock->flagdiese = -1;
+			return (1);
+		}
+	}
+	if (!nbr)
+		return (0);
+
 	if (stock->fonction == 'x')
-		write(1, "x", 1);
+		write(1, "0x", 2);
 	if (stock->fonction == 'X')
-		write(1, "X", 1);
+		write(1, "0X", 2);
 	if (stock->fonction == 'X' || stock->fonction == 'x')
 		return (2);
 	return (1);
@@ -56,11 +67,8 @@ int	checkrelou_long_base(char *s, unsigned long nbr, t_sdp *stock)
 	int ret;
 
 	ret = 0;
-	if (stock->flagdiese && nbr)
-	{
-		ret = check_l_diese(stock);
-		stock->size = stock->size - ret;
-	}
+	if (stock->flagdiese)
+		ret = check_l_diese(stock, nbr);
 	if (stock->flagzero && !stock->precision && stock->size > 0 \
 			&& !stock->flagminus)
 	{

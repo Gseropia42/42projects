@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:32:56 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/24 20:09:04 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 18:50:13 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ char	*move_format(char *format)
 
 int		affichage(va_list ap, t_sdp *stock)
 {
-	if (stock->fonction == '\0')
-		return (0);
 	if (stock->fonction == 'p')
 		return (return_llong_base(ap, stock, 16, 0));
 	if (stock->fonction == 'C')
@@ -59,7 +57,10 @@ int		affichage(va_list ap, t_sdp *stock)
 		return (return_long_base(ap, stock, 10, 0));
 	if (stock->fonction == 'u')
 		return (return_base(ap, stock, 10, 0));
-	return (0);
+	if (stock->fonction == '\0')
+		return (0);
+	else
+		return (return_c(ap, stock));
 }
 
 void	more_checks(char *format, va_list ap, t_sdp *stock)
@@ -107,7 +108,7 @@ int		cf(char *format, va_list ap, t_sdp *stock)
 			return (-1);
 		format = move_format(format);
 	}
-	if (stock->fonction == '%' && gnt(++format, 1) != '%' && gnt(format, 1))
+	if (stock->fonction == '%' && !gnt(format, 1))
 		return (-1);
 	return (affichage(ap, stock));
 }

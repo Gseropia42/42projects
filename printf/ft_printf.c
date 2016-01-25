@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:15:27 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 12:55:36 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 18:51:30 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,24 @@ char		gnt(char *format, int check)
 {
 	char *s;
 	char *temp;
-
+	char *s2;
 	s = ft_strnew(15);
 	s = "%sSdDpoOxXcCuUi";
 	temp = s;
+	s2 = format;
 	while (*format)
 	{
 		while (*s)
-		{
 			if (*s++ == *format)
-			{
 				return (*format);
-			}
-		}
 		if (check == 0)
 			return ('\0');
 		s = temp;
 		format++;
 	}
-	return ('\0');
+	while(*s2 && checkflagada(s2))
+		s2++;
+	return (*s2);
 }
 
 t_sdp		*stocktoutca(t_sdp **list, int ret)
@@ -91,9 +90,11 @@ int			callprint(const char *f, t_sdp *s, va_list ap, int ret)
 				if ((ret = ret + cf((char*)f, ap, s)) == s->temp - 1 && ret++)
 					while (checkflagada(f) && *f)
 						f++;
+				else if (ret == s->temp - 10)
+					return (-1);
 				else
 				{
-					while (!gnt((char*)f, 0) && *f && *(f + 1))
+					while (*f != s->fonction)
 						f++;
 					f++;
 				}

@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 14:26:03 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 13:55:36 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 18:11:53 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ typedef	struct	t_sdp
 	int		sizze; // z
 	int		temp;
 }				t_sdp;
+void		ft_putw(wchar_t Lc);
+int			ft_wcharlen(wchar_t *c);
+void		ft_putwchar(wchar_t *c);
 int			return_p(va_list ap, t_sdp *stock);
 char		*ft_longlongitoa(long long n);
 char		*ft_longitoa(long n);

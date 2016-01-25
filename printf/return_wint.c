@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 14:25:08 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 19:24:12 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 15:22:51 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,14 @@ int	return_ccc(char c, t_sdp *stock)
 		}
 	return (ret);
 }
+static int valid_int(wint_t i)
+{
+	if (i > 255)
+		return(1);
+	return (0);
+}
 
-int	return_cc(va_list ap, t_sdp *stock)
+int		return_cc(va_list ap, t_sdp *stock)
 {
 	char	c;
 	wint_t	i;
@@ -44,6 +50,8 @@ int	return_cc(va_list ap, t_sdp *stock)
 		i = va_arg(ap, wint_t);
 		c = i;
 	}
+	if (valid_int(i))
+		return (-10);
 	if (stock->flagzero && !stock->flagminus)
 	{
 		print = '0';

@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 14:25:08 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/21 20:57:05 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 16:53:05 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ int	return_c(va_list ap, t_sdp *stock)
 	print = ' ';
 	if (stock->flaglong == 1)
 		return (return_cc(ap, stock));
-	if (stock->fonction == '%')
-		c = '%';
-	else
+	if (stock->fonction == 'c')
 	{
 		i = va_arg(ap, int);
 		c = i;
 	}
+	else
+		c = stock->fonction;
 	if (stock->flagzero && !stock->flagminus)
 		print = '0';
 	while (stock->size > 1 && !stock->flagminus)

@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 13:24:42 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 19:04:09 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ int	lastcheck_base(char *s, int nbr, t_sdp *stock)
 int	check_diese(t_sdp *stock, int nbr)
 {
 	if (stock->fonction == 'o' || stock->fonction == 'O')
-	{
+	{	
+		if (stock->precision && stock->prec_size)
+			return (0);
 		write(1, "0", 1);
 		if (!nbr)
 		{
@@ -67,9 +69,7 @@ int	checkrelou_base(char *s, int nbr, t_sdp *stock)
 
 	ret = 0;
 	if (stock->flagdiese)
-	{
 		ret = check_diese(stock, nbr);
-	}
 	if (stock->flagzero && !stock->precision && stock->size > 0 \
 			&& !stock->flagminus)
 	{
@@ -114,21 +114,24 @@ int	return_base(va_list ap, t_sdp *stock, int base, int maj)
 	unsigned	int nbr;
 	char			*s;
 	
-	if (stock->flaglonglong)
+	if (stock->flaglonglong || stock->sizze)
 		return (return_llong_base(ap, stock, base, maj));
 	if (stock->flaglong || stock->fonction == 'O')
 		return (return_long_base(ap, stock, base, maj));
 	if (stock->flagmax)
 		return (return_maxbase(ap, stock, base, maj));
 	nbr = va_arg(ap, unsigned int);
+	while (stock->flagshort && nbr > 65535)
+		nbr = nbr - 65536;
+	while (stock->flagchar && (nbr > 255))
+		nbr = nbr + 256;
 	if (maj == 0)
 		s = ft_itoabaseprintf(nbr, base);
 	else
 		s = ft_itoabase_max(nbr, base);
 	if (stock->flagdiese && (stock->fonction == 'x' || stock->fonction == 'X'))
 		stock->size = stock->size - 2;
-	else if (stock->flagdiese && \
-		(stock->fonction == 'o' || stock->fonction == 'O'))
+	else if (stock->flagdiese && (stock->fonction == 'o' || stock->fonction == 'O'))
 		stock->size = stock->size - 1;
 	return (easyflags_base(s, nbr, stock));
 }

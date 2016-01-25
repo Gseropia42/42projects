@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 14:40:01 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/23 11:11:07 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 18:52:00 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,27 @@ int	return_l_text(wchar_t *string, t_sdp *stock)
 	}
 	else
 	{
-		while (*string)
+		if (!string)
+		{	
+			ft_putstr("(null)");
+			ret = 6;
+		}
+		else
 		{
-			write(1, string++, 1);
-			ret++;
+			ft_putwchar(string);
+			ret = ft_wcharlen(string);
 		}
 		stock->size = stock->size - ret;
 	}
 	return (ret);
 }
-
+int valid_string(wchar_t *string)
+{
+	while(*string)
+		if (*string++ > 127)
+			return (1);
+	return (0);
+}
 int	return_l_s_zeroflag(wchar_t *string, t_sdp *stock, int taille)
 {
 	int ret;
@@ -106,15 +117,16 @@ int	return_long_s(va_list ap, t_sdp *stock)
 	wchar_t	*temp;
 
 	t = 0;
-	s = va_arg(ap, wchar_t *);
-	temp = s;
-	while (*temp++)
-		t++;
-	if (s == NULL)
+	if ((s = va_arg(ap, wchar_t *)))
 	{
-		ft_putstr("(null)");
-		return (6);
+		temp = s;
+		while (*temp++)
+			t++;
 	}
+	else if (stock->precision == 0)
+		t = 6;
+	if (s && valid_string(s) && stock->precision == 0)
+		return (-10);
 	if (stock->flagzero && !stock->flagminus && stock->size)
 		return (return_l_s_zeroflag(s, stock, t) + return_l_text(s, stock));
 	if (stock->flagminus && stock->size)

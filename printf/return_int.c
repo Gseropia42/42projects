@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/24 20:19:06 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/25 18:49:39 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	return_i(va_list ap, t_sdp *stock)
 	int		test;
 	int		ret;
 
-	if (stock->flaglonglong == 1)
+	if (stock->flaglonglong == 1 || stock->sizze)
 		return (return_longlongi(ap, stock));
 	if (stock->flagmax == 1)
 		return (return_maxi(ap, stock));
@@ -108,13 +108,15 @@ int	return_i(va_list ap, t_sdp *stock)
 		return (return_longi(ap, stock));
 	ret = 0;
 	test = va_arg(ap, int);
-	if (stock->flagshort && test > 32767)
+	while (stock->flagshort && test > 32767)
 		test = test - 32768 - 32768;
 	if (stock->flagchar)
 	{
 		if (test < -128)
-			test = test + 256;
+			while (test < -128)
+				test = test + 256;
 		else if (test > 127)
+			while (test > 127)
 			test = test - 256;
 	}
 	if (test < 0)
