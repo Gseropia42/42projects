@@ -6,116 +6,136 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/28 04:36:52 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/02/09 11:38:58 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int		lastcheck_base(char *s, int nbr, t_sdp *stock)
+int	lastcheck_base(char *s, int nbr, t_sdp *st)
 {
+	int		ret;
 	char	temp[1];
-	char	d;
 
-	d = '0';
 	temp[0] = '\0';
-	if (!stock->prec_size && stock->precision && !nbr)
+	ret = 0;
+	if (((!st->prec_size && st->precision) || st->flagdiese == -1)
+			&& !nbr)
 		s = temp;
-	if (stock->precision)
-		while (stock->prec_size > 0 && stock->prec_size-- > ft_strlen(s))
+	if (st->precision)
+		while (st->prec_size > 0 && st->prec_size-- > ft_strlen(s))
 		{
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-			if (stock->size > 0)
-				stock->size--;
+			write(1, "0", 1);
+			ret++;
+			if (st->size > 0)
+				st->size--;
 		}
-	stock->string = ft_freejoin(stock, s);
-	stock->size = stock->size - ft_strlen(s);
-	temp[0] = ' ';
-	if (stock->flagminus && stock->size)
-		while (stock->size-- > 0)
+	ft_putstr(s);
+	st->size = st->size - ft_strlen(s);
+	if (st->flagminus && st->size)
+		while (st->size && st->size-- > 0)
 		{
-			d = ' ';
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			write(1, " ", 1);
+			ret++;
 		}
+	return (ret + ft_strlen(s));
+}
+
+int	check_diese(t_sdp *st, int nbr)
+{
+	if (st->fonction == 'o' || st->fonction == 'O')
+	{
+		if (st->precision && st->prec_size)
+			return (0);
+		write(1, "0", 1);
+		if (!nbr)
+		{
+			st->flagdiese = -1;
+			return (1);
+		}
+	}
+	if (!nbr)
+		return (0);
+	if (st->fonction == 'x')
+		write(1, "0x", 2);
+	if (st->fonction == 'X')
+		write(1, "0X", 2);
+	if (st->fonction == 'X' || st->fonction == 'x')
+		return (2);
 	return (1);
 }
 
-void	check_diese(t_sdp *st, int nbr)
+int	checkrelou_base(char *s, int nbr, t_sdp *st)
 {
-	char d;
+	int ret;
 
-	d = '0';
-	if (!nbr && st->fonction != 'p')
-		return ;
-	st->string = ft_freejoin(st, ft_strsub(&d, 0, 1));
-	d = 'x';
-	if (st->fonction == 'x' || st->fonction == 'p')
-		st->string = ft_freejoin(st, ft_strsub(&d, 0, 1));
-	d = 'X';
-	if (st->fonction == 'X')
-		st->string = ft_freejoin(st, ft_strsub(&d, 0, 1));
-}
-
-int		checkrelou_base(char *s, int nbr, t_sdp *stock)
-{
-	char d;
-
-	d = '0';
-	if (stock->flagdiese)
-		check_diese(stock, nbr);
-	if (stock->flagzero && !stock->precision && stock->size > 0 \
-			&& !stock->flagminus)
-		while (stock->size > 0 && stock->size-- > ft_strlen(s))
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-	return (lastcheck_base(s, nbr, stock));
-}
-
-int		easyflags_base(char *s, int nbr, t_sdp *stock)
-{
-	char d;
-
-	d = ' ';
-	if ((long long)stock->size < 0)
-		stock->size = 0;
-	if (stock->size && !stock->flagminus && !stock->flagzero)
+	ret = 0;
+	if (st->flagdiese)
+		ret = check_diese(st, nbr);
+	if (st->flagzero && !st->precision && st->size > 0 \
+			&& !st->flagminus)
 	{
-		if (stock->precision && stock->prec_size > ft_strlen(s))
-			while (stock->size > 0 && stock->size-- > (stock->prec_size))
-				stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-		else
-			while (stock->size > 0 && stock->size-- > ft_strlen(s))
-				stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+		while (st->size && st->size-- > ft_strlen(s))
+		{
+			write(1, "0", 1);
+			ret++;
+		}
 	}
-	return (checkrelou_base(s, nbr, stock));
+	return (ret + lastcheck_base(s, nbr, st));
 }
 
-int		return_base(va_list ap, t_sdp *stock, int base, int maj)
+int	easyflags_base(char *s, int nbr, t_sdp *st)
 {
-	unsigned int		nbr;
-	char				*s;
+	int		ret;
+	char	temp[1];
 
-	if (stock->flaglonglong || stock->sizze || stock->fonction == 'p')
-		return (llong_base(ap, stock, base, maj));
-	if (stock->flaglong || stock->fonction == 'O')
-		return (long_base(ap, stock, base, maj));
-	if (stock->flagmax)
-		return (maxbase(ap, stock, base, maj));
+	temp[0] = '\0';
+	ret = 0;
+	if (!st->prec_size && st->precision && !nbr)
+		s = temp;
+	if (st->size && !st->flagminus && !st->flagzero)
+	{
+		if (st->precision && st->prec_size > ft_strlen(s))
+			while (st->size > 0 && st->size-- > (st->prec_size))
+			{
+				ret++;
+				write(1, " ", 1);
+			}
+		else
+			while (st->size > 0 && st->size-- > ft_strlen(s))
+			{
+				ret++;
+				write(1, " ", 1);
+			}
+	}
+	return (ret + checkrelou_base(s, nbr, st));
+}
+
+int	return_base(va_list ap, t_sdp *st, int base, int maj)
+{
+	unsigned int	nbr;
+	char			*s;
+
+	if (st->fonction == 'b')
+		base = 2;
+	if (st->flaglonglong || st->sizze || st->fonction == 'p')
+		return (llong_base(ap, st, base, maj));
+	if (st->flaglong || st->fonction == 'O')
+		return (long_base(ap, st, base, maj));
+	if (st->flagmax)
+		return (maxbase(ap, st, base, maj));
 	nbr = va_arg(ap, unsigned int);
-	while (stock->flagshort && nbr > 65535)
+	while (st->flagshort && nbr > 65535)
 		nbr = nbr - 65536;
-	while (stock->flagchar && (nbr > 255))
+	while (st->flagchar && (nbr > 255))
 		nbr = nbr + 256;
 	if (maj == 0)
 		s = ft_itoabaseprintf(nbr, base);
 	else
 		s = ft_itoabase_max(nbr, base);
-	if (nbr == 0 && stock->precision == 1 && stock->prec_size == 0 && stock->size > 0)
-		stock->lol++;
-	if (stock->flagdiese && (stock->fonction == 'x' ||
-				stock->fonction == 'X'))
-		stock->size = stock->size - 2;
-	else if (stock->flagdiese &&
-			(stock->fonction == 'o' || stock->fonction == 'O'))
-		stock->size = stock->size - 1;
-	return (easyflags_base(s, nbr, stock));
+	if (st->flagdiese && (st->fonction == 'x' || st->fonction == 'X'))
+		st->size = st->size - 2;
+	else if (st->flagdiese && (st->fonction == 'o' || st->fonction == 'O'))
+		st->size = st->size - 1;
+	return (easyflags_base(s, nbr, st));
 }

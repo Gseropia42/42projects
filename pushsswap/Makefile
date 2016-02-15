@@ -6,7 +6,7 @@
 #    By: tisergue <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/11 11:37:26 by tisergue          #+#    #+#              #
-#    Updated: 2016/02/03 12:00:26 by gseropia         ###   ########.fr        #
+#    Updated: 2016/02/15 17:31:59 by gseropia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -17,10 +17,10 @@ SRCS		=		ft_isprint.c ft_itoabase.c ft_itoabaselonglongmax.c \
 					ft_itoabasemax.c ft_longitoabase.c ft_longlongitoa.c \
 					ft_longlongitoabase.c ft_maxtoa.c ft_printf.c return_char.c \
 					onfaitdeschecks.c return_int.c return_longint.c pssolver.c\
-					return_longlongi.c return_longlongo.c return_longo.c \
+					return_longlongi.c return_longlongo.c return_longo.c push_swap.c \
 					return_majstring.c return_maxi.c return_octal.c ft_putwchar.c \
 					return_string.c return_wint.c returnmaxo.c ft_atoi.c ft_bzero.c \
-					ft_isalnum.c ft_isascii.c ft_isalpha.c ft_isdigit.c ft_freejoin.c \
+					ft_isalnum.c ft_isascii.c ft_isalpha.c ft_isdigit.c \
 					ft_isprint.c ft_memalloc.c ft_memcpy.c ft_lstnew.c ft_memchr.c ft_itoa.c \
 					ft_memdel.c ft_memccpy.c ft_memcmp.c ft_putchar.c ft_memmove.c \
 					ft_putchar_fd.c ft_memset.c ft_putendl.c ft_putendl_fd.c ft_putnbr.c \

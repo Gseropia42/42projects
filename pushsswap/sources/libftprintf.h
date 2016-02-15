@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/08 14:26:03 by gseropia          #+#    #+#             */
-/*   Updated: 2016/02/09 11:51:58 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/02/09 11:32:59 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,11 @@ typedef	struct		s_sdp
 	int				flagshort;
 	int				flagchar;
 	int				sizze;
-	size_t			temp;
-	char*			string;
-	size_t			lol;
-	char*			verif;
+	int				temp;
 }					t_sdp;
-char				*ft_freejoin(t_sdp *s, char *buf);
+int					read_achar(wint_t prout);
+int					read_wchar(wchar_t *temp);
+int					ft_printf(const char *format, ...);
 int					valid_string(wchar_t *string);
 void				ft_putw(wchar_t c);
 int					ft_wcharlen(wchar_t *c);

@@ -6,98 +6,96 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/28 03:51:37 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/26 16:43:21 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	maxlastcheck(char *s, intmax_t nbr, t_sdp *stock)
+int	maxlastcheck(char *s, t_sdp *stock)
 {
-	char	temp[1];
-	char	d;
+	int ret;
 
-	d = '0';
-	temp[0] = '\0';
-	if (!stock->prec_size && stock->precision && !nbr)
-		s = temp;
-	else if (stock->precision)
-		while (stock->prec_size-- > ft_strlen(s) && stock->prec_size > 0)
+	ret = 0;
+	if (stock->precision)
+		while (stock->prec_size-- > ft_strlen(s))
 		{
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-			if (stock->size > 0)
-				stock->size--;
+			write(1, "0", 1);
+			ret++;
+			stock->size--;
 		}
-	stock->string = ft_freejoin(stock, s);
+	ft_putstr(s);
 	stock->size = stock->size - ft_strlen(s);
-	if (stock->flagminus && stock->size > 0)
+	if (stock->flagminus && stock->size)
 		while (stock->size-- > 0)
 		{
-			d = ' ';
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			write(1, " ", 1);
+			ret++;
 		}
-	return (1);
+	return (ret + ft_strlen(s));
 }
 
 int	maxcheckrelou(char *s, intmax_t nbr, t_sdp *stock)
 {
-	char	d;
+	int ret;
 
-	d = '+';
-	if (stock->flagplus && nbr >= 0)
-		stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-	if (nbr < 0)
+	ret = 0;
+	if (stock->flagplus && nbr > 0)
 	{
-		stock->string = ft_freejoin(stock, ft_strsub(s++, 0, 1));
-		if (stock->size > 0)
-			stock->size--;
-		if (stock->prec_size > 0)
-			stock->prec_size--;
+		write(1, "+", 1);
+		ret++;
 	}
-	if (stock->flagzero && stock->size > 0 && !stock->flagminus)
+	if (stock->flagspace && !stock->flagplus && nbr > 0)
 	{
-		while (!stock->precision && stock->size-- > ft_strlen(s))
+		write(1, " ", 1);
+		ret++;
+	}
+	if (stock->flagzero && !stock->precision && stock->size > 0
+			&& !stock->flagminus)
+	{
+		while (stock->size-- > ft_strlen(s))
 		{
-			d = '0';
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-			if (stock->prec_size > 0)
-				stock->prec_size--;
+			write(1, "0", 1);
+			ret++;
 		}
 	}
-	return (maxlastcheck(s, nbr, stock));
+	return (ret + maxlastcheck(s, stock));
 }
 
 int	maxeasyflags(char *s, intmax_t nbr, t_sdp *stock)
 {
-	char	temp[1];
+	int ret;
 
-	temp[0] = '\0';
-	if (!stock->prec_size && stock->precision && !nbr)
-		s = temp;
-	temp[0] = ' ';
-	if (stock->flagspace && !stock->flagplus && nbr >= 0)
+	ret = 0;
+	if (stock->size && !stock->flagminus)
 	{
-		stock->string = ft_freejoin(stock, ft_strsub(&temp[0], 0, 1));
-		if (stock->size)
-			stock->size--;
+		if (stock->precision)
+			while (stock->size-- > (stock->prec_size + 1))
+			{
+				ret++;
+				write(1, " ", 1);
+			}
+		else
+			while (stock->size-- > (ft_strlen(ft_itoa(nbr)) + 1))
+			{
+				ret++;
+				write(1, " ", 1);
+			}
 	}
-	if (stock->flagplus && nbr >= 0 && stock->size > 0)
-		stock->size--;
-	if (stock->size > 0 && !stock->flagminus && stock->precision)
-		while (stock->size > ft_strlen(s)
-				&& stock->size-- > (stock->prec_size))
-			stock->string = ft_freejoin(stock, ft_strsub(&temp[0], 0, 1));
-	if (stock->size > 0 && !stock->flagminus && !stock->precision)
-		while (stock->size > 0 && !stock->flagzero &&
-				stock->size-- > (ft_strlen(s)))
-			stock->string = ft_freejoin(stock, ft_strsub(&temp[0], 0, 1));
-	return (maxcheckrelou(s, nbr, stock));
+	stock->size--;
+	return (ret + maxcheckrelou(s, nbr, stock));
 }
 
 int	return_maxi(va_list ap, t_sdp *stock)
 {
-	intmax_t		test;
+	char		*s;
+	intmax_t	test;
+	int			ret;
 
+	ret = 0;
 	test = va_arg(ap, intmax_t);
-	return (maxeasyflags(ft_maxtoa(test), test, stock));
+	s = ft_maxtoa(test);
+	ret = 0;
+	ret = maxeasyflags(s, test, stock);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:32:56 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/28 03:34:18 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/31 20:48:48 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		affichage(va_list ap, t_sdp *stock)
 		return (return_base(ap, stock, 16, 1));
 	if (stock->fonction == 'U')
 		return (long_base(ap, stock, 10, 0));
-	if (stock->fonction == 'u')
+	if (stock->fonction == 'u' || stock->fonction == 'b')
 		return (return_base(ap, stock, 10, 0));
 	if (stock->fonction == '\0')
 		return (0);

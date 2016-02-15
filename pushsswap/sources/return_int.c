@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 11:53:05 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/28 04:36:44 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/30 18:11:55 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,42 @@
 
 int	lastcheck(char *s, int nbr, t_sdp *stock)
 {
+	int		ret;
 	char	temp[1];
-	char	d;
 
-	d = '0';
+	ret = 0;
 	temp[0] = '\0';
 	if (!stock->prec_size && stock->precision && !nbr)
 		s = temp;
-	if (stock->precision)
+	else if (stock->precision)
 		while (stock->prec_size-- > ft_strlen(s) && stock->prec_size > 0)
 		{
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			write(1, "0", 1);
+			ret++;
 			if (stock->size > 0)
 				stock->size--;
 		}
-	stock->string = ft_freejoin(stock, s);
+	ft_putstr(s);
 	stock->size = stock->size - ft_strlen(s);
 	if (stock->flagminus && stock->size > 0)
 		while (stock->size-- > 0)
 		{
-			d = ' ';
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			write(1, " ", 1);
+			ret++;
 		}
-	return (1);
+	return (ret + ft_strlen(s));
 }
 
 int	checkrelou(char *s, int nbr, t_sdp *stock)
 {
-	char	d;
+	int ret;
 
-	d = '+';
-	if (stock->flagplus && nbr >= 0)
-		stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-	if (nbr < 0)
+	ret = 0;
+	if (stock->flagplus && nbr >= 0 && ++ret)
+		write(1, "+", 1);
+	if (nbr < 0 && ++ret)
 	{
-		stock->string = ft_freejoin(stock, ft_strsub(s++, 0, 1));
+		write(1, s++, 1);
 		if (stock->size > 0)
 			stock->size--;
 		if (stock->prec_size > 0)
@@ -58,27 +59,28 @@ int	checkrelou(char *s, int nbr, t_sdp *stock)
 	{
 		while (!stock->precision && stock->size-- > ft_strlen(s))
 		{
-			d = '0';
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			write(1, "0", 1);
+			ret++;
 			if (stock->prec_size > 0)
 				stock->prec_size--;
 		}
 	}
-	return (lastcheck(s, nbr, stock));
+	return (ret + lastcheck(s, nbr, stock));
 }
 
 int	easyflags(char *s, int nbr, t_sdp *stock)
 {
+	int		ret;
 	char	temp[1];
-	char 	d;
-	
-	d = ' ';
+
 	temp[0] = '\0';
+	ret = 0;
 	if (!stock->prec_size && stock->precision && !nbr)
 		s = temp;
 	if (stock->flagspace && !stock->flagplus && nbr >= 0)
 	{
-		stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+		write(1, " ", 1);
+		ret++;
 		if (stock->size)
 			stock->size--;
 	}
@@ -86,18 +88,19 @@ int	easyflags(char *s, int nbr, t_sdp *stock)
 		stock->size--;
 	if (stock->size > 0 && !stock->flagminus && stock->precision)
 		while (stock->size > ft_strlen(s)
-				&& stock->size-- > (stock->prec_size))
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+				&& stock->size-- > (stock->prec_size) && ++ret)
+			write(1, " ", 1);
 	if (stock->size > 0 && !stock->flagminus && !stock->precision)
 		while (stock->size > 0 && !stock->flagzero &&
-				stock->size-- > (ft_strlen(s)))
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-	return (checkrelou(s, nbr, stock));
+				stock->size-- > (ft_strlen(s)) && ++ret)
+			write(1, " ", 1);
+	return (ret + checkrelou(s, nbr, stock));
 }
 
 int	return_i(va_list ap, t_sdp *stock)
 {
 	int			test;
+	static int	ret = 0;
 
 	if (stock->flaglonglong == 1 || stock->sizze)
 		return (return_longlongi(ap, stock));
@@ -119,5 +122,5 @@ int	return_i(va_list ap, t_sdp *stock)
 	}
 	if (test < 0)
 		stock->prec_size++;
-	return (easyflags(ft_itoa(test), test, stock));
+	return (ret = easyflags(ft_itoa(test), test, stock));
 }

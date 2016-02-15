@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 14:40:01 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/27 17:24:49 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/02/09 11:37:55 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,10 @@ int	return_l_text(wchar_t *string, t_sdp *stock)
 
 	ret = 0;
 	if (stock->precision)
-		while (stock->prec_size-- > 0 && *string)
-		{
-			write(1, string, sizeof(string));
-			ret++;
-			stock->size--;
-		}
+	{
+		ret = read_wchar(string);
+		stock->size = stock->size - ret;
+	}
 	else
 	{
 		if (!string)
@@ -69,10 +67,7 @@ int	return_l_text(wchar_t *string, t_sdp *stock)
 			ret = 6;
 		}
 		else
-		{
-			write(1, string, sizeof(string));
-			ret = ft_wcharlen(string);
-		}
+			ret = read_wchar(string);
 		stock->size = stock->size - ret;
 	}
 	return (ret);
@@ -117,8 +112,6 @@ int	return_long_s(va_list ap, t_sdp *stock)
 	}
 	else if (stock->precision == 0)
 		t = 6;
-	if (s && valid_string(s) && stock->precision == 0)
-		return (-10);
 	if (stock->flagzero && !stock->flagminus && stock->size)
 		return (return_l_s_zeroflag(stock, t) + return_l_text(s, stock));
 	if (stock->flagminus && stock->size)

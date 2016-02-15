@@ -6,17 +6,17 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 10:44:26 by gseropia          #+#    #+#             */
-/*   Updated: 2016/02/09 11:53:43 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/02/10 19:15:04 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-
-int 	find_min(t_plist **liste, int debut)
+int		find_min(t_plist **liste, int debut)
 {
-	int	min;
-	t_plist *temp;
+	int		min;
+	t_plist	*temp;
+
 	min = 0;
 	temp = *liste;
 	while (temp && debut--)
@@ -32,11 +32,11 @@ int 	find_min(t_plist **liste, int debut)
 	return (min);
 }
 
-int 	find_max(t_plist **liste, int debut)
+int		find_max(t_plist **liste, int debut)
 {
-	int	max;
-	t_plist *temp;
-	
+	int		max;
+	t_plist	*temp;
+
 	temp = *liste;
 	max = INT_MIN;
 	while (temp && debut--)
@@ -66,34 +66,31 @@ int		ft_check(t_plist **alpha, t_plist **beta)
 	return (1);
 }
 
-int pssolver(t_plist **alpha, t_plist **beta, int max)
+int		pssolver(t_plist **alpha, t_plist **beta, int max)
 {
 	t_plist *tmpa;
 	t_plist *tmpb;
 
 	tmpa = *alpha;
-	tmpb = *beta;
 	while (tmpa->nb != max)
 	{
 		ft_rotate(alpha, "ra");
 		if (ft_check(alpha, beta))
 			ft_printf(" ");
 	}
-	tmpa = *alpha;
-	if (ft_check(alpha, beta))
+	if ((tmpa = *alpha) && ft_check(alpha, beta))
 		while (tmpa->next)
 			ft_push(alpha, beta, "pb ");
 	tmpb = *beta;
-	while (tmpb)
+	while ((tmpb = *beta))
 	{
 		max = find_max(beta, 0);
 		while (tmpb->nb != max)
 			ft_rotate(beta, "rb ");
 		ft_rotate(beta, "rb ");
-		ft_push(beta, alpha, "pb");
+		ft_push(beta, alpha, "pa");
 		if (ft_check(alpha, beta))
 			ft_printf(" ");
-		tmpb = *beta;
 	}
 	return (0);
 }
@@ -101,6 +98,7 @@ int pssolver(t_plist **alpha, t_plist **beta, int max)
 void	pileprint(t_plist *alpha, t_plist *beta)
 {
 	t_plist *temp;
+
 	temp = alpha;
 	ft_printf("Pile a : ");
 	while (temp)
@@ -115,5 +113,5 @@ void	pileprint(t_plist *alpha, t_plist *beta)
 		ft_printf("%d ", temp->nb);
 		temp = temp->next;
 	}
-		write(1, "\n", 1);
+	write(1, "\n", 1);
 }

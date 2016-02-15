@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 13:15:27 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/29 16:12:49 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/30 15:47:50 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ char		gnt(char *format, int check)
 	char *temp;
 	char *s2;
 
-	s = ft_strnew(15);
-	s = "%sSdDpoOxXcCuUi";
+	s = ft_strnew(16);
+	s = "%sSdDpoOxXcCuUib";
 	temp = s;
 	s2 = format;
 	while (*format)
@@ -51,14 +51,9 @@ char		gnt(char *format, int check)
 
 t_sdp		*stocktoutca(t_sdp **list, int ret)
 {
-	static t_sdp *stock; 
-	
-	if (!stock)
-	{
-		stock = malloc(sizeof(t_sdp));
-		stock->string = NULL;
-		stock->lol = 0;
-	}
+	t_sdp *stock;
+
+	stock = malloc(sizeof(t_sdp));
 	stock->temp = ret;
 	stock->fonction = 0;
 	stock->flagminus = 0;
@@ -75,18 +70,15 @@ t_sdp		*stocktoutca(t_sdp **list, int ret)
 	stock->flagshort = 0;
 	stock->flagchar = 0;
 	stock->sizze = 0;
-	stock->verif = stock->string;
 	*list = stock;
 	return (stock);
 }
 
-int			callprint(const char *f, t_sdp *s, va_list ap, size_t ret)
+int			callprint(const char *f, t_sdp *s, va_list ap, int ret)
 {
-	s = stocktoutca(&s, ret);
 	while (*f)
-	{
-		if (*f != '%')
-			s->string = ft_freejoin(s, ft_strsub(f++, 0, 1));
+		if (*f != '%' && ++ret)
+			write(1, f++, 1);
 		else
 		{
 			s = stocktoutca(&s, ret);
@@ -105,22 +97,14 @@ int			callprint(const char *f, t_sdp *s, va_list ap, size_t ret)
 			else
 				while (checkflagada(f) && *f)
 					f++;
+			free(s);
 		}
-	}
-	if (s->string)
-	{
-		ft_putstr(s->string);
-		ret = ft_strlen(s->string);
-		free (s->string);
-		s->string = NULL;
-		return(ret + s->lol);
-	}
 	return (ret);
 }
 
 int			ft_printf(const char *format, ...)
 {
-	size_t	ret;
+	int			ret;
 	va_list		ap;
 	t_sdp		*stock;
 

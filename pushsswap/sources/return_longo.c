@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/17 15:22:41 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/27 19:46:51 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/26 20:10:56 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,96 +14,109 @@
 
 int	lastcheck_long_base(char *s, unsigned long nbr, t_sdp *stock)
 {
+	int		ret;
 	char	temp[1];
 
 	temp[0] = '\0';
-	if (!stock->prec_size && stock->precision && !nbr)
+	ret = 0;
+	if (((!stock->prec_size && stock->precision) || stock->flagdiese == -1)
+			&& !nbr)
 		s = temp;
-	temp[0] = '0';
 	if (stock->precision)
-		while (stock->prec_size > 0 && stock->prec_size-- > ft_strlen(s))
+		while (stock->prec_size-- > ft_strlen(s) && ++ret)
 		{
-			stock->string = ft_freejoin(stock, ft_strsub(&temp[0], 0, 1));
-			if (stock->size > 0)
+			write(1, "0", 1);
+			if ((long long)stock->size > 0)
 				stock->size--;
 		}
-	stock->string = ft_freejoin(stock, s);
+	ft_putstr(s);
 	stock->size = stock->size - ft_strlen(s);
-	temp[0] = ' ';
 	if (stock->flagminus && stock->size)
 		while (stock->size-- > 0)
-			stock->string = ft_freejoin(stock, ft_strsub(&temp[0], 0, 1));
-	return (1);
+		{
+			write(1, " ", 1);
+			ret++;
+		}
+	return (ret + ft_strlen(s));
 }
 
-int	check_l_diese(t_sdp *st, unsigned long nbr)
+int	check_l_diese(t_sdp *stock, int nbr)
 {
-	char d;
-
-	d = '0';
-	if (!nbr && st->fonction != 'p')
+	if (stock->fonction == 'o' || stock->fonction == 'O')
+	{
+		write(1, "0", 1);
+		if (!nbr)
+		{
+			stock->flagdiese = -1;
+			return (1);
+		}
+	}
+	if (!nbr)
 		return (0);
-	st->string = ft_freejoin(st, ft_strsub(&d, 0, 1));
-	d = 'x';
-	if (st->fonction == 'x' || st->fonction == 'p')
-		st->string = ft_freejoin(st, ft_strsub(&d, 0, 1));
-	d = 'X';
-	if (st->fonction == 'X')
-		st->string = ft_freejoin(st, ft_strsub(&d, 0, 1));
-	if (st->fonction == 'X' || st->fonction == 'x' || st->fonction == 'p')
+	if (stock->fonction == 'x')
+		write(1, "0x", 2);
+	if (stock->fonction == 'X')
+		write(1, "0X", 2);
+	if (stock->fonction == 'X' || stock->fonction == 'x')
 		return (2);
 	return (1);
 }
 
 int	checkrelou_long_base(char *s, unsigned long nbr, t_sdp *stock)
 {
-	char	d;
-	int		ret;
+	int ret;
 
 	ret = 0;
-	d = '0';
 	if (stock->flagdiese)
 		ret = check_l_diese(stock, nbr);
 	if (stock->flagzero && !stock->precision && stock->size > 0 \
 			&& !stock->flagminus)
-		while (stock->size > 0 && stock->size-- > ft_strlen(s))
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-	return (lastcheck_long_base(s, nbr, stock));
+	{
+		while (stock->size-- > ft_strlen(s))
+		{
+			write(1, "0", 1);
+			ret++;
+		}
+	}
+	return (ret + lastcheck_long_base(s, nbr, stock));
 }
 
 int	easyflags_long_base(char *s, unsigned long nbr, t_sdp *stock)
 {
-	char d;
+	int ret;
 
-	d = ' ';
+	ret = 0;
 	if ((long long)stock->size < 0)
 		stock->size = 0;
 	if (stock->size && !stock->flagminus && !stock->flagzero)
 	{
 		if (stock->precision && stock->prec_size > ft_strlen(s))
-			while (stock->size > 0 && stock->size-- > (stock->prec_size))
-				stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			while (stock->size-- > (stock->prec_size))
+			{
+				ret++;
+				write(1, " ", 1);
+			}
 		else
-			while (stock->size > 0 && stock->size-- > ft_strlen(s))
-				stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			while (stock->size-- > ft_strlen(s) && stock->size > 0)
+			{
+				ret++;
+				write(1, " ", 1);
+			}
 	}
-	return (checkrelou_long_base(s, nbr, stock));
+	return (ret + checkrelou_long_base(s, nbr, stock));
 }
 
 int	long_base(va_list ap, t_sdp *stock, unsigned int base, int maj)
 {
-	unsigned long		nbr;
-	char				*s;
+	unsigned long	nbr;
+	char			*s;
 
 	nbr = va_arg(ap, unsigned long);
-	if (stock->fonction == 'p')
-		stock->flagdiese = 1;
 	if (maj == 0)
 		s = ft_longbase(nbr, base);
 	else
 		s = ft_itoabase_long_max(nbr, base);
-	if (stock->flagdiese && (stock->fonction == 'x' ||
-				stock->fonction == 'X' || stock->fonction == 'p'))
+	if (stock->flagdiese && (stock->fonction == 'x' || stock->fonction == 'X'))
 		stock->size = stock->size - 2;
 	else if (stock->flagdiese && \
 		(stock->fonction == 'o' || stock->fonction == 'O'))

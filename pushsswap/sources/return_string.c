@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/16 14:40:01 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/28 04:11:46 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/31 22:37:37 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,42 @@
 
 int	return_s_spaceflag(t_sdp *stock, long long tai)
 {
-	char d;
+	int ret;
 
-	d = ' ';
+	ret = 0;
 	if (stock->precision && stock->prec_size < tai)
+	{
 		while (stock->size-- > stock->prec_size)
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+		{
+			write(1, " ", 1);
+			ret++;
+		}
+	}
 	else
+	{
 		while (stock->size-- > tai)
 		{
-			d = ' ';
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+			write(1, " ", 1);
+			ret++;
 		}
-	return (1);
+	}
+	return (ret);
 }
 
 int	return_s_minusflag(t_sdp *stock)
 {
-	char d;
+	int ret;
 
-	d = ' ';
+	ret = 0;
 	while (stock->size-- > 0)
-		stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-	return (1);
+	{
+		write(1, " ", 1);
+		ret++;
+	}
+	return (ret);
 }
 
-int	return_text(char *string, t_sdp *stock)
+int	return_text(char *string, t_sdp *stock, long long tai)
 {
 	int ret;
 
@@ -47,38 +57,49 @@ int	return_text(char *string, t_sdp *stock)
 	if (stock->precision)
 		while (stock->prec_size-- > 0 && *string)
 		{
-			stock->string = ft_freejoin(stock, ft_strsub(string++, 0, 1));
+			write(1, string++, 1);
+			ret++;
 			stock->size--;
 		}
 	else
 	{
 		if (string)
 		{
-			stock->string = ft_freejoin(stock, string);
-			ret = ft_strlen(string);
+			ft_putstr(string);
+			ret = tai;
 		}
 		else
 		{
-			stock->string = ft_freejoin(stock, "(null)");
+			ft_putstr("(null)");
 			ret = 6;
 		}
 		stock->size = stock->size - ret;
 	}
-	return (1);
+	return (ret);
 }
 
 int	return_s_zeroflag(t_sdp *stock, long long tai)
 {
-	char d;
+	int ret;
 
-	d = '0';
+	ret = 0;
 	if (stock->precision && stock->prec_size < tai)
+	{
 		while (stock->size > 0 && stock->size-- > stock->prec_size)
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
+		{
+			write(1, "0", 1);
+			ret++;
+		}
+	}
 	else
+	{
 		while (stock->size > 0 && stock->size-- > tai)
-			stock->string = ft_freejoin(stock, ft_strsub(&d, 0, 1));
-	return (1);
+		{
+			write(1, "0", 1);
+			ret++;
+		}
+	}
+	return (ret);
 }
 
 int	return_s(va_list ap, t_sdp *stock)
@@ -95,12 +116,12 @@ int	return_s(va_list ap, t_sdp *stock)
 	else if (stock->precision == 0)
 		t = 6;
 	if (stock->flagzero && !stock->flagminus && stock->size)
-		return (return_s_zeroflag(stock, t) + return_text(s, stock));
+		return (return_s_zeroflag(stock, t) + return_text(s, stock, t));
 	if (stock->flagminus && stock->size)
-		return (return_text(s, stock) + return_s_minusflag(stock));
+		return (return_text(s, stock, t) + return_s_minusflag(stock));
 	if (stock->size)
-		return (return_s_spaceflag(stock, t) + return_text(s, stock));
+		return (return_s_spaceflag(stock, t) + return_text(s, stock, t));
 	else
-		return (return_text(s, stock));
+		return (return_text(s, stock, t));
 	return (0);
 }

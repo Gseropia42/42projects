@@ -6,7 +6,7 @@
 /*   By: gseropia <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 14:56:00 by gseropia          #+#    #+#             */
-/*   Updated: 2016/01/28 19:00:54 by gseropia         ###   ########.fr       */
+/*   Updated: 2016/01/29 17:30:52 by gseropia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
-# include <stdarg.h>
 
 typedef struct	s_list
 {
@@ -24,7 +23,7 @@ typedef struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
-int				ft_printf(const char *format, ...);
+
 int				ft_return_pos(char *buf, char c);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstnew(void const *content, size_t content_size);
